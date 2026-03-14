@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>A.S</title>
 
@@ -28,10 +28,23 @@ color:white;
 
 background:
 linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
-url("/background.jpeg") center/cover no-repeat fixed;
+url("background.jpeg") center/cover no-repeat fixed;
 
 overflow:hidden;
 
+}
+
+/* ambient glow */
+
+#ambient{
+position:absolute;
+inset:0;
+
+background:
+radial-gradient(circle at 25% 40%,rgba(255,0,80,.12),transparent 45%),
+radial-gradient(circle at 75% 60%,rgba(255,0,80,.08),transparent 50%);
+
+z-index:1;
 }
 
 /* particles */
@@ -56,18 +69,14 @@ justify-content:center;
 background:black;
 
 z-index:999;
-
 cursor:pointer;
 
 }
 
 .loader-text{
-
 font-size:22px;
 letter-spacing:6px;
-
 opacity:.7;
-
 }
 
 /* glass card */
@@ -97,61 +106,129 @@ width:90%;
 
 }
 
+/* music toggle */
+
+.music-toggle{
+
+position:absolute;
+top:16px;
+right:16px;
+
+width:38px;
+height:38px;
+
+border-radius:10px;
+
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.15);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+cursor:pointer;
+
+transition:.25s;
+
+}
+
+.music-toggle:hover{
+
+background:rgba(255,0,80,.4);
+box-shadow:0 0 15px rgba(255,0,80,.8);
+
+}
+
+.music-toggle svg{
+width:20px;
+height:20px;
+fill:white;
+}
+
 /* name */
 
 h1{
-
 font-size:48px;
 letter-spacing:6px;
-
 margin-bottom:10px;
 
 text-shadow:
 0 0 15px white,
 0 0 30px #ff0050;
-
 }
 
 /* bio */
 
 .bio{
-
 font-size:17px;
 opacity:.85;
-margin-bottom:30px;
+margin-bottom:25px;
+min-height:24px;
+}
 
+.cursor{
+display:inline-block;
+width:2px;
+height:18px;
+background:white;
+margin-left:4px;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%,50%,100%{opacity:1}
+25%,75%{opacity:0}
 }
 
 /* quotes */
 
+.quote-section{
+height:30px;
+margin-bottom:30px;
+position:relative;
+}
+
 .quote{
 
-font-size:14px;
-opacity:.65;
+position:absolute;
+width:100%;
 
-margin-bottom:35px;
+opacity:0;
+transform:translateY(10px);
+
+transition:.8s;
+
+font-size:14px;
+opacity:.7;
 
 }
 
-/* VISUALIZER */
+.quote.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* spotify */
+
+.spotify{
+margin:25px 0;
+}
+
+/* visualizer */
 
 #visualizer{
-
 width:100%;
 height:100px;
-
+margin-top:20px;
 }
 
 /* socials */
 
 .socials{
-
 margin-top:30px;
-
 display:flex;
 justify-content:center;
 gap:18px;
-
 }
 
 .social-btn{
@@ -171,30 +248,11 @@ transition:.25s;
 }
 
 .social-btn:hover{
-
 background:rgba(255,0,80,0.5);
 box-shadow:0 0 25px rgba(255,0,80,.9);
-
-}
-
-/* glow */
-
-.card::after{
-
-content:"";
-
-position:absolute;
-inset:-40px;
-
-background:radial-gradient(circle,#ff005055,transparent 70%);
-
-z-index:-1;
-filter:blur(60px);
-
 }
 
 </style>
-
 </head>
 
 <body>
@@ -204,38 +262,55 @@ filter:blur(60px);
 </div>
 
 <canvas id="particles"></canvas>
+<div id="ambient"></div>
 
 <div class="card">
+
+<button id="musicToggle" class="music-toggle"></button>
 
 <h1>A.S</h1>
 
 <p class="bio">
-Student @DPSI • Learning Tabla
+<span id="typewriter"></span><span class="cursor"></span>
 </p>
 
-<p class="quote">
-"clarity begins when faith sleeps"
-</p>
+<div class="quote-section">
+
+<div class="quote active">clarity begins when faith sleeps</div>
+<div class="quote">some people prefer comfort over truth</div>
+<div class="quote">the greatest prison is thinking you are free</div>
+<div class="quote">morals are just a man made concept</div>
+
+</div>
+
+<div class="spotify">
+
+<iframe style="border-radius:12px"
+src="https://open.spotify.com/embed/track/6I3mqTwhRpn34SLVafSH7G"
+width="100%"
+height="80"
+frameBorder="0"
+allowfullscreen=""
+allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+</iframe>
+
+</div>
 
 <canvas id="visualizer"></canvas>
 
 <audio id="music" loop muted>
-<source src="/meaningful-love-instrumental.mp3">
+<source src="meaningful-love-instrumental.mp3">
 </audio>
 
 <div class="socials">
 
 <a class="social-btn"
 href="https://instagram.com/aaryaman_shrivastav"
-target="_blank">
-Instagram
-</a>
+target="_blank">Instagram</a>
 
 <a class="social-btn"
 href="https://youtube.com/@Mackerein"
-target="_blank">
-YouTube
-</a>
+target="_blank">YouTube</a>
 
 </div>
 
@@ -243,10 +318,26 @@ YouTube
 
 <script>
 
+/* icons */
+
+const speakerIcon=`<svg viewBox="0 0 24 24">
+<path d="M3 9v6h4l5 4V5L7 9H3z"/>
+<path d="M16 7a5 5 0 010 10"/>
+</svg>`
+
+const muteIcon=`<svg viewBox="0 0 24 24">
+<path d="M3 9v6h4l5 4V5L7 9H3z"/>
+<line x1="18" y1="9" x2="22" y2="13" stroke="white" stroke-width="2"/>
+<line x1="22" y1="9" x2="18" y2="13" stroke="white" stroke-width="2"/>
+</svg>`
+
 /* loader */
 
 const loader=document.getElementById("loader")
 const audio=document.getElementById("music")
+const toggle=document.getElementById("musicToggle")
+
+toggle.innerHTML=speakerIcon
 
 document.addEventListener("click",()=>{
 
@@ -258,6 +349,26 @@ audio.play()
 initAudio()
 
 })
+
+/* toggle */
+
+toggle.onclick=(e)=>{
+
+e.stopPropagation()
+
+if(audio.muted){
+
+audio.muted=false
+toggle.innerHTML=speakerIcon
+
+}else{
+
+audio.muted=true
+toggle.innerHTML=muteIcon
+
+}
+
+}
 
 /* particles */
 
@@ -287,7 +398,7 @@ r:Math.random()*2
 
 function animateParticles(){
 
-ctx.fillStyle="rgba(0,0,0,0.2)"
+ctx.fillStyle="rgba(0,0,0,0.15)"
 ctx.fillRect(0,0,canvas.width,canvas.height)
 
 particles.forEach(p=>{
@@ -311,7 +422,63 @@ requestAnimationFrame(animateParticles)
 
 animateParticles()
 
-/* VISUALIZER */
+/* typewriter */
+
+const texts=[
+"Student @DPSI",
+"Learning Tabla",
+"Some Depths Are Too Hard To Escape"
+]
+
+let textIndex=0
+let charIndex=0
+let typing=true
+
+const typeElement=document.getElementById("typewriter")
+
+function typeEffect(){
+
+let current=texts[textIndex]
+
+if(typing){
+
+typeElement.textContent=current.substring(0,charIndex++)
+if(charIndex>current.length){
+typing=false
+setTimeout(typeEffect,1000)
+return
+}
+
+}else{
+
+typeElement.textContent=current.substring(0,charIndex--)
+if(charIndex==0){
+typing=true
+textIndex=(textIndex+1)%texts.length
+}
+
+}
+
+setTimeout(typeEffect,typing?40:25)
+
+}
+
+typeEffect()
+
+/* quotes */
+
+const quotes=document.querySelectorAll(".quote")
+let current=0
+
+setInterval(()=>{
+
+quotes[current].classList.remove("active")
+current=(current+1)%quotes.length
+quotes[current].classList.add("active")
+
+},5000)
+
+/* visualizer */
 
 const vis=document.getElementById("visualizer")
 const vctx=vis.getContext("2d")
@@ -351,10 +518,8 @@ vctx.clearRect(0,0,vis.width,vis.height)
 
 let bars=70
 let spacing=vis.width/bars
-
 let center=vis.height/2
-
-let active=32
+let active=30
 
 for(let i=0;i<bars;i++){
 
@@ -366,7 +531,6 @@ if(isActive){
 
 let index=Math.floor((i/bars)*dataArray.length)
 let value=dataArray[index]/255
-
 let height=value*60
 
 drawBar(x,center-height,height*2,spacing*.5)
@@ -388,21 +552,16 @@ let r=w/2
 vctx.beginPath()
 
 vctx.moveTo(x+r,y)
-
 vctx.lineTo(x+w-r,y)
-
 vctx.quadraticCurveTo(x+w,y,x+w,y+r)
 
 vctx.lineTo(x+w,y+h-r)
-
 vctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h)
 
 vctx.lineTo(x+r,y+h)
-
 vctx.quadraticCurveTo(x,y+h,x,y+h-r)
 
 vctx.lineTo(x,y+r)
-
 vctx.quadraticCurveTo(x,y,x+r,y)
 
 vctx.closePath()
@@ -410,7 +569,7 @@ vctx.closePath()
 vctx.fillStyle="white"
 
 vctx.shadowColor="#ff0050"
-vctx.shadowBlur=12
+vctx.shadowBlur=10
 
 vctx.fill()
 
