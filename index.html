@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Aaryaman Shrivastav</title>
+<title>A.S</title>
 
 <style>
 600;800&display=swap');
@@ -56,8 +56,7 @@ body::after{
   padding:80px 100px;
   text-align:center;
   box-shadow:0 0 40px rgba(255,0,80,0.5);
-  transform-style:preserve-3d;
-  transition:transform 0.2s ease;
+  
 }
 
 h1{
@@ -65,11 +64,8 @@ h1{
   margin-bottom:16px;
   letter-spacing:6px;
   text-transform:uppercase;
-  color:#ff004c;
-  text-shadow:
-    0 0 10px #ff004c,
-    0 0 20px #ff004c,
-    0 0 40px #ff004c;
+  color:#ffffff;
+  text-shadow:0 0 10px rgba(255,255,255,0.4);
 }
 
 p{
@@ -113,10 +109,7 @@ p{
 
 <canvas id="particles"></canvas>
 
-<audio id="bgMusic" controls loop>
-  <source src="meaningful-love-instrumental.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
+
 
 <div class="card" id="card">
   <h1>Aaryaman Shrivastav</h1>
@@ -124,6 +117,16 @@ p{
 
   <div class="visualizer">
     <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <audio id="bgMusic" controls loop style="margin-top:25px;">
+    <source src="meaningful-love-instrumental.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
     <div class="bar"></div>
     <div class="bar"></div>
     <div class="bar"></div>
@@ -171,13 +174,7 @@ function animate(){
 
 animate();
 
-const card=document.getElementById("card");
 
-document.addEventListener("mousemove",e=>{
-  const x=(window.innerWidth/2-e.clientX)/25;
-  const y=(window.innerHeight/2-e.clientY)/25;
-  card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`;
-});
 
 window.addEventListener("resize",()=>{
   canvas.width=window.innerWidth;
