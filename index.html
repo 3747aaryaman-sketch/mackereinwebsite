@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -17,7 +18,6 @@ box-sizing:border-box;
 }
 
 body{
-
 min-height:100dvh;
 display:flex;
 align-items:center;
@@ -25,15 +25,10 @@ justify-content:center;
 font-family:Georgia,serif;
 overflow:hidden;
 color:white;
-
 background:url("/background.gif") center/cover no-repeat fixed;
-
 cursor:url("cursor.cur"), auto;
 padding:20px;
-
 }
-
-/* dark overlay */
 
 body::before{
 content:"";
@@ -50,13 +45,10 @@ inset:0;
 display:flex;
 align-items:center;
 justify-content:center;
-
 background:rgba(0,0,0,0.85);
 backdrop-filter:blur(25px);
-
 z-index:999;
 cursor:pointer;
-
 transition:opacity 1s;
 }
 
@@ -87,28 +79,34 @@ z-index:0;
 /* card */
 
 .card{
-
 position:relative;
 z-index:2;
-
 width:100%;
 max-width:520px;
-
 padding:clamp(30px,5vw,60px);
-
 border-radius:26px;
-
 background:rgba(255,255,255,0.06);
 backdrop-filter:blur(25px) saturate(180%);
-
 border:1px solid rgba(255,255,255,0.15);
-
 box-shadow:
 0 0 60px rgba(255,0,80,0.25),
 inset 0 0 25px rgba(255,255,255,0.05);
-
 text-align:center;
+}
 
+/* pfp */
+
+.pfp{
+width:110px;
+height:110px;
+border-radius:50%;
+object-fit:cover;
+margin:0 auto 18px auto;
+display:block;
+border:2px solid rgba(255,255,255,0.3);
+box-shadow:
+0 0 25px rgba(255,0,80,0.6),
+0 0 60px rgba(255,0,80,0.25);
 }
 
 /* name */
@@ -127,16 +125,12 @@ transform:translateY(20px);
 }
 
 .name-letter.show{
-
 opacity:1;
 transform:translateY(0);
-
 text-shadow:
 0 0 15px #fff,
 0 0 30px #ff0050;
-
 transition:.4s;
-
 }
 
 /* bio */
@@ -189,61 +183,51 @@ transform:translateY(0);
 
 #visualizer{
 width:100%;
-height:100px;
+height:110px;
+margin-top:10px;
+}
+
+/* speaker */
+
+.speaker-btn{
+margin-top:10px;
+background:none;
+border:none;
+cursor:pointer;
+}
+
+.speaker-btn svg{
+width:28px;
+height:28px;
+fill:white;
+opacity:.85;
 }
 
 /* socials */
 
 .socials{
-
 margin-top:25px;
-
 display:flex;
 flex-wrap:wrap;
 gap:12px;
-
 justify-content:center;
-
 }
 
 .social-btn{
-
 padding:10px 18px;
 border-radius:12px;
-
 background:rgba(255,0,80,0.15);
 border:1px solid rgba(255,0,80,0.4);
-
 color:white;
 text-decoration:none;
-
 font-size:14px;
-
 transition:.3s;
-
 }
 
 .social-btn:hover{
-
 background:rgba(255,0,80,0.5);
 box-shadow:0 0 25px rgba(255,0,80,.9);
-
 transform:scale(1.05);
-
-}
-
-/* small phones */
-
-@media (max-width:420px){
-
-.card{
-padding:28px 22px;
-}
-
-.quote-section{
-height:48px;
-}
-
 }
 
 </style>
@@ -260,6 +244,8 @@ height:48px;
 
 <div class="card">
 
+<img src="/pfp.jpeg" class="pfp">
+
 <h1 id="username"></h1>
 
 <p class="bio">
@@ -267,34 +253,27 @@ height:48px;
 </p>
 
 <div class="quote-section">
-
 <div class="quote active">clarity begins when faith sleeps</div>
 <div class="quote">some people prefer comfort over truth</div>
 <div class="quote">the greatest prison is thinking you are free</div>
 <div class="quote">morals are just a man made concept</div>
-
 </div>
 
 <canvas id="visualizer"></canvas>
+
+<button class="speaker-btn" id="speakerBtn">
+<svg id="speakerIcon" viewBox="0 0 24 24">
+<path d="M3 9v6h4l5 4V5L7 9H3z"/>
+</svg>
+</button>
 
 <audio id="bgMusic" loop muted>
 <source src="/meaningful-love-instrumental.mp3">
 </audio>
 
 <div class="socials">
-
-<a class="social-btn"
-href="https://www.instagram.com/aaryaman_shrivastav/?hl=en"
-target="_blank">
-Instagram
-</a>
-
-<a class="social-btn"
-href="https://youtube.com/@Mackerein"
-target="_blank">
-YouTube
-</a>
-
+<a class="social-btn" href="https://www.instagram.com/aaryaman_shrivastav/?hl=en" target="_blank">Instagram</a>
+<a class="social-btn" href="https://youtube.com/@Mackerein" target="_blank">YouTube</a>
 </div>
 
 </div>
@@ -309,123 +288,32 @@ const audio=document.getElementById("bgMusic")
 document.addEventListener("click",unlock)
 
 function unlock(){
-
 loader.classList.add("hidden")
-
 audio.muted=false
 audio.play()
-
 initAudio()
 revealName()
-
 document.removeEventListener("click",unlock)
-
 }
 
-/* name animation */
+/* name */
 
 const name="A.S"
 const container=document.getElementById("username")
 
 name.split("").forEach(l=>{
-
 const span=document.createElement("span")
-
 span.textContent=l
 span.classList.add("name-letter")
-
 container.appendChild(span)
-
 })
 
 function revealName(){
-
 document.querySelectorAll(".name-letter")
 .forEach((l,i)=>{
-
 setTimeout(()=>l.classList.add("show"),i*80)
-
 })
-
 }
-
-/* particles */
-
-const canvas=document.getElementById("particles")
-const ctx=canvas.getContext("2d")
-
-let mouse={x:0,y:0}
-
-window.addEventListener("mousemove",e=>{
-mouse.x=e.clientX
-mouse.y=e.clientY
-})
-
-function resize(){
-
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
-
-}
-
-resize()
-window.addEventListener("resize",resize)
-
-/* adaptive particle count */
-
-const particleCount=window.innerWidth<600?60:120
-
-let particles=[]
-
-for(let i=0;i<particleCount;i++){
-
-particles.push({
-
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-
-dx:(Math.random()-.5)*.4,
-dy:(Math.random()-.5)*.4,
-
-r:Math.random()*2+1
-
-})
-
-}
-
-function animate(){
-
-ctx.clearRect(0,0,canvas.width,canvas.height)
-
-particles.forEach(p=>{
-
-let dist=Math.hypot(mouse.x-p.x,mouse.y-p.y)
-
-if(dist<120){
-
-p.x+=(p.x-mouse.x)/30
-p.y+=(p.y-mouse.y)/30
-
-}
-
-p.x+=p.dx
-p.y+=p.dy
-
-if(p.x<0||p.x>canvas.width) p.dx*=-1
-if(p.y<0||p.y>canvas.height) p.dy*=-1
-
-ctx.beginPath()
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
-ctx.fillStyle="white"
-ctx.fill()
-
-})
-
-requestAnimationFrame(animate)
-
-}
-
-animate()
 
 /* typewriter */
 
@@ -438,7 +326,6 @@ const texts=[
 let textIndex=0
 let charIndex=0
 let typing=true
-
 const typeElement=document.getElementById("typewriter")
 
 function typeEffect(){
@@ -476,12 +363,25 @@ const quotes=document.querySelectorAll(".quote")
 let current=0
 
 setInterval(()=>{
-
 quotes[current].classList.remove("active")
 current=(current+1)%quotes.length
 quotes[current].classList.add("active")
-
 },5000)
+
+/* speaker */
+
+const speakerBtn=document.getElementById("speakerBtn")
+const speakerIcon=document.getElementById("speakerIcon")
+
+let muted=false
+
+speakerBtn.onclick=()=>{
+muted=!muted
+audio.muted=muted
+speakerIcon.innerHTML=muted
+? `<path d="M16 12l5 5-1.5 1.5L14.5 13.5 10 18H6v-6H3V9h3V3h4l5 4z"/>`
+: `<path d="M3 9v6h4l5 4V5L7 9H3z"/>`
+}
 
 /* visualizer */
 
@@ -489,10 +389,8 @@ const vis=document.getElementById("visualizer")
 const vctx=vis.getContext("2d")
 
 function resizeVis(){
-
 vis.width=vis.offsetWidth
-vis.height=100
-
+vis.height=110
 }
 
 resizeVis()
@@ -505,7 +403,7 @@ function initAudio(){
 audioCtx=new (window.AudioContext||window.webkitAudioContext)()
 
 analyser=audioCtx.createAnalyser()
-analyser.fftSize=256
+analyser.fftSize=512
 
 source=audioCtx.createMediaElementSource(audio)
 
@@ -528,22 +426,31 @@ analyser.getByteFrequencyData(dataArray)
 
 vctx.clearRect(0,0,vis.width,vis.height)
 
-let center=vis.height/2
-let bars=60
-let spacing=vis.width/bars
+const bars=80
+const barWidth=vis.width/bars
+const baseline=vis.height
+
+vctx.fillStyle="rgb(255,0,80)"
 
 for(let i=0;i<bars;i++){
 
 let index=Math.floor((i/bars)*dataArray.length)
 let value=dataArray[index]/255
-let height=value*60
+let height=value*70
 
-let x=i*spacing
+let x=i*barWidth
+let y=baseline-height
+let radius=barWidth/2
 
-vctx.fillStyle="rgb(255,0,80)"
+vctx.beginPath()
+vctx.moveTo(x,y+radius)
+vctx.arcTo(x,y,x+barWidth,y,radius)
+vctx.arcTo(x+barWidth,y,x+barWidth,y+height,radius)
+vctx.lineTo(x+barWidth,y+height)
+vctx.lineTo(x,y+height)
+vctx.closePath()
 
-vctx.fillRect(x,center-height,spacing*.6,height)
-vctx.fillRect(x,center,spacing*.6,height)
+vctx.fill()
 
 }
 
