@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>A.S</title>
 
@@ -17,24 +17,47 @@ box-sizing:border-box;
 }
 
 body{
-height:100vh;
+
+min-height:100dvh;
 display:flex;
 align-items:center;
 justify-content:center;
 font-family:Georgia,serif;
-overflow:hidden;
 color:white;
+overflow:hidden;
+
 background:url("/background.jpeg") center/cover no-repeat fixed;
+
 cursor:url("cursor.cur"), auto;
+padding:20px;
+
 }
 
-/* dark overlay */
+/* overlay */
 
 body::before{
 content:"";
 position:absolute;
 inset:0;
 background:rgba(0,0,0,0.6);
+z-index:0;
+}
+
+/* wave background */
+
+#waveCanvas{
+position:absolute;
+inset:0;
+z-index:0;
+opacity:.25;
+}
+
+/* particles */
+
+#particles{
+position:absolute;
+inset:0;
+z-index:1;
 }
 
 /* loader */
@@ -45,10 +68,14 @@ inset:0;
 display:flex;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,0.8);
+
+background:rgba(0,0,0,0.85);
 backdrop-filter:blur(30px);
+
 z-index:999;
+
 cursor:pointer;
+
 transition:opacity 1s;
 }
 
@@ -58,7 +85,7 @@ pointer-events:none;
 }
 
 .loader-text{
-font-size:24px;
+font-size:clamp(18px,3vw,26px);
 letter-spacing:4px;
 animation:pulse 2s infinite;
 }
@@ -68,21 +95,19 @@ animation:pulse 2s infinite;
 50%{opacity:1}
 }
 
-/* particles */
-
-#particles{
-position:absolute;
-inset:0;
-z-index:0;
-}
-
 /* glass card */
 
 .card{
+
 position:relative;
 z-index:2;
-padding:60px 80px;
-border-radius:28px;
+
+width:100%;
+max-width:520px;
+
+padding:clamp(30px,5vw,60px);
+
+border-radius:26px;
 
 background:rgba(255,255,255,0.06);
 backdrop-filter:blur(25px) saturate(180%);
@@ -90,20 +115,20 @@ backdrop-filter:blur(25px) saturate(180%);
 border:1px solid rgba(255,255,255,0.15);
 
 box-shadow:
-0 0 80px rgba(255,0,80,0.25),
+0 0 60px rgba(255,0,80,0.25),
 inset 0 0 25px rgba(255,255,255,0.05);
 
 text-align:center;
-max-width:520px;
 
 transition:transform .2s ease;
+
 }
 
 /* name */
 
 h1{
-font-size:46px;
-letter-spacing:6px;
+font-size:clamp(32px,7vw,46px);
+letter-spacing:5px;
 margin-bottom:15px;
 min-height:54px;
 }
@@ -124,8 +149,8 @@ transition:.4s;
 /* bio */
 
 .bio{
-font-size:18px;
-margin-bottom:30px;
+font-size:clamp(14px,3vw,18px);
+margin-bottom:25px;
 opacity:.9;
 }
 
@@ -148,7 +173,7 @@ animation:blink 1s infinite;
 .quote-section{
 position:relative;
 height:40px;
-margin-bottom:30px;
+margin-bottom:25px;
 overflow:hidden;
 }
 
@@ -169,16 +194,21 @@ transform:translateY(0);
 
 #visualizer{
 width:100%;
-height:120px;
+height:110px;
 }
 
 /* socials */
 
 .socials{
-margin-top:30px;
+
+margin-top:25px;
+
 display:flex;
-gap:20px;
+flex-wrap:wrap;
+gap:12px;
+
 justify-content:center;
+
 }
 
 .social-btn{
@@ -193,6 +223,7 @@ color:white;
 text-decoration:none;
 
 transition:.3s;
+
 }
 
 .social-btn:hover{
@@ -208,9 +239,10 @@ transform:scale(1.05);
 <body>
 
 <div id="loader">
-<div class="loader-text">Enter...</div>
+<div class="loader-text">Tap / Click</div>
 </div>
 
+<canvas id="waveCanvas"></canvas>
 <canvas id="particles"></canvas>
 
 <div class="card" id="card">
@@ -222,10 +254,12 @@ transform:scale(1.05);
 </p>
 
 <div class="quote-section">
+
 <div class="quote active">clarity begins when faith sleeps</div>
 <div class="quote">some people prefer comfort over truth</div>
 <div class="quote">the greatest prison is thinking you are free</div>
 <div class="quote">morals are just a man made concept</div>
+
 </div>
 
 <canvas id="visualizer"></canvas>
@@ -236,21 +270,23 @@ transform:scale(1.05);
 
 <div class="socials">
 
-<a class="social-btn" target="_blank"
-href="https://www.instagram.com/aaryaman_shrivastav/?hl=en">
-Instagram
-</a>
+<a class="social-btn"
+href="https://www.instagram.com/aaryaman_shrivastav/?hl=en"
+target="_blank">Instagram</a>
 
-<a class="social-btn" target="_blank"
-href="https://youtube.com/@Mackerein">
-YouTube
-</a>
+<a class="social-btn"
+href="https://youtube.com/@Mackerein"
+target="_blank">YouTube</a>
 
 </div>
 
 </div>
 
 <script>
+
+/* detect device */
+
+const isMobile = window.innerWidth < 768
 
 /* loader */
 
@@ -276,49 +312,67 @@ document.removeEventListener("click",unlock)
 /* animated name */
 
 const name="A.S"
-const nameContainer=document.getElementById("username")
+const container=document.getElementById("username")
 
 name.split("").forEach(l=>{
 const span=document.createElement("span")
 span.textContent=l
 span.classList.add("name-letter")
-nameContainer.appendChild(span)
+container.appendChild(span)
 })
 
 function revealName(){
 
 document.querySelectorAll(".name-letter")
 .forEach((l,i)=>{
-
 setTimeout(()=>l.classList.add("show"),i*80)
+})
+
+}
+
+/* 3D CARD TILT */
+
+const card=document.getElementById("card")
+
+if(!isMobile){
+
+document.addEventListener("mousemove",(e)=>{
+
+const x=(window.innerWidth/2-e.clientX)/25
+const y=(window.innerHeight/2-e.clientY)/25
+
+card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`
+
+})
+
+}else{
+
+document.addEventListener("touchmove",(e)=>{
+
+const t=e.touches[0]
+
+const x=(window.innerWidth/2-t.clientX)/35
+const y=(window.innerHeight/2-t.clientY)/35
+
+card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`
 
 })
 
 }
 
-/* mouse reactive particles */
+/* PARTICLES WITH TRAILS */
 
 const canvas=document.getElementById("particles")
 const ctx=canvas.getContext("2d")
 
-let mouse={x:0,y:0}
+canvas.width=innerWidth
+canvas.height=innerHeight
 
-window.addEventListener("mousemove",e=>{
-mouse.x=e.clientX
-mouse.y=e.clientY
-})
-
-function resize(){
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
-}
-
-resize()
-window.addEventListener("resize",resize)
+let particleCount=isMobile?60:140
 
 let particles=[]
 
-for(let i=0;i<120;i++){
+for(let i=0;i<particleCount;i++){
 
 particles.push({
 
@@ -336,24 +390,16 @@ r:Math.random()*2+1
 
 function animateParticles(){
 
-ctx.clearRect(0,0,canvas.width,canvas.height)
+ctx.fillStyle="rgba(0,0,0,0.1)"
+ctx.fillRect(0,0,canvas.width,canvas.height)
 
 particles.forEach(p=>{
-
-let dist=Math.hypot(mouse.x-p.x,mouse.y-p.y)
-
-if(dist<120){
-
-p.x+=(p.x-mouse.x)/25
-p.y+=(p.y-mouse.y)/25
-
-}
 
 p.x+=p.dx
 p.y+=p.dy
 
-if(p.x<0||p.x>canvas.width) p.dx*=-1
-if(p.y<0||p.y>canvas.height) p.dy*=-1
+if(p.x<0||p.x>canvas.width)p.dx*=-1
+if(p.y<0||p.y>canvas.height)p.dy*=-1
 
 ctx.beginPath()
 ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
@@ -368,7 +414,46 @@ requestAnimationFrame(animateParticles)
 
 animateParticles()
 
-/* typewriter */
+/* WAVE BACKGROUND */
+
+const wave=document.getElementById("waveCanvas")
+const wctx=wave.getContext("2d")
+
+wave.width=innerWidth
+wave.height=innerHeight
+
+let t=0
+
+function drawWave(){
+
+wctx.clearRect(0,0,wave.width,wave.height)
+
+for(let j=0;j<3;j++){
+
+wctx.beginPath()
+
+for(let x=0;x<wave.width;x++){
+
+let y=Math.sin(x*0.01+t+j)*20+wave.height/2
+
+wctx.lineTo(x,y)
+
+}
+
+wctx.strokeStyle="rgba(255,0,80,0.15)"
+wctx.stroke()
+
+}
+
+t+=0.02
+
+requestAnimationFrame(drawWave)
+
+}
+
+drawWave()
+
+/* TYPEWRITER */
 
 const texts=[
 "Student @DPSI",
@@ -424,22 +509,19 @@ quotes[current].classList.add("active")
 
 },5000)
 
-/* spotify style visualizer */
+/* VISUALIZER */
 
 const vis=document.getElementById("visualizer")
 const vctx=vis.getContext("2d")
 
 vis.width=vis.offsetWidth
-vis.height=120
+vis.height=110
 
-let audioCtx
-let analyser
-let source
-let dataArray
+let audioCtx,analyser,source,dataArray
 
 function initAudio(){
 
-audioCtx=new (window.AudioContext||window.webkitAudioContext)()
+audioCtx=new(window.AudioContext||window.webkitAudioContext)()
 
 analyser=audioCtx.createAnalyser()
 analyser.fftSize=256
@@ -459,47 +541,28 @@ function draw(){
 
 requestAnimationFrame(draw)
 
-if(!analyser) return
+if(!analyser)return
 
 analyser.getByteFrequencyData(dataArray)
 
 vctx.clearRect(0,0,vis.width,vis.height)
 
 let center=vis.height/2
-let bars=70
+let bars=isMobile?40:70
 let spacing=vis.width/bars
-let active=32
 
 for(let i=0;i<bars;i++){
 
-let x=i*spacing
-
-let isActive=i>(bars/2-active/2)&&i<(bars/2+active/2)
-
-if(isActive){
-
 let index=Math.floor((i/bars)*dataArray.length)
-
 let value=dataArray[index]/255
-
 let height=value*70
+
+let x=i*spacing
 
 vctx.fillStyle="rgb(255,0,80)"
 
-/* up */
-
 vctx.fillRect(x,center-height,spacing*.6,height)
-
-/* down */
-
 vctx.fillRect(x,center,spacing*.6,height)
-
-}else{
-
-vctx.fillStyle="rgba(255,0,80,.4)"
-vctx.fillRect(x,center-1,spacing*.6,2)
-
-}
 
 }
 
