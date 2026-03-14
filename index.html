@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -16,45 +17,56 @@ padding:0;
 box-sizing:border-box;
 }
 
-/* custom cursor */
-
-body{
-cursor:url("/cursor.cur"), auto;
-}
-
-/* page */
-
 body{
 height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-font-family:Georgia, "Times New Roman", serif;
+font-family:Georgia,serif;
 overflow:hidden;
 color:white;
 background:url("/background.jpeg") center/cover no-repeat fixed;
 }
 
-/* dark overlay */
+/* overlay */
 
 body::before{
 content:"";
 position:absolute;
 inset:0;
-background:rgba(0,0,0,0.55);
+background:rgba(0,0,0,0.6);
 }
 
-/* grid */
+/* loader */
 
-body::after{
-content:"";
-position:absolute;
+#loader{
+position:fixed;
 inset:0;
-background-image:
-linear-gradient(rgba(255,0,80,0.12) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,0,80,0.12) 1px,transparent 1px);
-background-size:60px 60px;
+backdrop-filter:blur(25px);
+background:rgba(0,0,0,0.65);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:999;
+transition:opacity 1.2s ease;
+}
+
+#loader.hidden{
+opacity:0;
 pointer-events:none;
+}
+
+.loader-text{
+font-size:22px;
+letter-spacing:4px;
+opacity:0.8;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%,100%{opacity:0.4}
+50%{opacity:1}
 }
 
 /* particles */
@@ -68,37 +80,84 @@ z-index:0;
 /* card */
 
 .card{
-
 position:relative;
 z-index:2;
-padding:70px 90px;
+padding:60px 80px;
 border-radius:25px;
 background:rgba(0,0,0,0.45);
 backdrop-filter:blur(18px);
 border:1px solid rgba(255,0,80,0.35);
-box-shadow:0 0 50px rgba(255,0,80,0.35);
+box-shadow:0 0 60px rgba(255,0,80,0.25);
 text-align:center;
 max-width:520px;
-transition:0.4s;
-
 }
 
-.card:hover{
-box-shadow:0 0 80px rgba(255,0,80,0.7);
-}
+/* neon name */
 
 h1{
-font-size:44px;
+font-size:46px;
 letter-spacing:6px;
-margin-bottom:12px;
+margin-bottom:15px;
 text-transform:uppercase;
-text-shadow:0 0 10px rgba(255,255,255,0.5);
+min-height:54px;
 }
 
-p{
+.name-letter{
+opacity:0;
+display:inline-block;
+transform:translateY(20px);
+}
+
+.name-letter.show{
+opacity:1;
+transform:translateY(0);
+text-shadow:0 0 10px #fff,0 0 25px #ff0050;
+transition:all 0.4s ease;
+}
+
+/* bio */
+
+.bio{
 font-size:18px;
-letter-spacing:1.5px;
 opacity:0.9;
+margin-bottom:30px;
+height:22px;
+}
+
+.cursor{
+display:inline-block;
+width:2px;
+background:white;
+margin-left:4px;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%,50%,100%{opacity:1;}
+25%,75%{opacity:0;}
+}
+
+/* quotes */
+
+.quote-section{
+margin-bottom:30px;
+min-height:50px;
+overflow:hidden;
+position:relative;
+}
+
+.quote{
+font-size:17px;
+opacity:0;
+transform:translateY(15px);
+transition:all 1s ease;
+position:absolute;
+width:100%;
+}
+
+.quote.active{
+opacity:1;
+transform:translateY(0);
 }
 
 /* visualizer */
@@ -106,62 +165,32 @@ opacity:0.9;
 #visualizer{
 width:100%;
 height:120px;
-margin-top:35px;
 }
 
-/* audio */
-
-audio{
-margin-top:20px;
-width:100%;
-}
-
-/* social buttons */
+/* socials */
 
 .socials{
-margin-top:25px;
+margin-top:30px;
 display:flex;
 gap:20px;
 justify-content:center;
 }
 
 .social-btn{
-
-display:flex;
-align-items:center;
-gap:10px;
-
 padding:10px 18px;
-
 border-radius:12px;
-
 background:rgba(255,0,80,0.15);
-
 border:1px solid rgba(255,0,80,0.4);
-
 color:white;
-
 text-decoration:none;
-
 font-size:15px;
-
 transition:0.3s;
-
 }
 
 .social-btn:hover{
-
-background:rgba(255,0,80,0.4);
-
-box-shadow:0 0 20px rgba(255,0,80,0.8);
-
+background:rgba(255,0,80,0.5);
+box-shadow:0 0 20px rgba(255,0,80,0.9);
 transform:scale(1.05);
-
-}
-
-.icon{
-width:20px;
-height:20px;
 }
 
 </style>
@@ -170,17 +199,30 @@ height:20px;
 
 <body>
 
+<div id="loader">
+<div class="loader-text">Move your mouse</div>
+</div>
+
 <canvas id="particles"></canvas>
 
 <div class="card">
 
-<h1>A.S</h1>
+<h1 id="username"></h1>
 
-<p>some depths are too hard to escape.</p>
+<p class="bio">
+<span id="typewriter"></span><span class="cursor"></span>
+</p>
+
+<div class="quote-section">
+<div class="quote active">Without music, life would be a mistake — Nietzsche</div>
+<div class="quote">Where words fail, music speaks — Andersen</div>
+<div class="quote">The unexamined life is not worth living — Socrates</div>
+<div class="quote">Music expresses what cannot be said — Victor Hugo</div>
+</div>
 
 <canvas id="visualizer"></canvas>
 
-<audio id="bgMusic" autoplay loop muted>
+<audio id="bgMusic" loop muted>
 <source src="/meaningful-love-instrumental.mp3" type="audio/mpeg">
 </audio>
 
@@ -188,36 +230,11 @@ height:20px;
 
 <a class="social-btn" target="_blank"
 href="https://www.instagram.com/aaryaman_shrivastav/?hl=en">
-
-<svg class="icon" fill="white" viewBox="0 0 24 24">
-<path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 
-0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm5 5.3A4.7 
-4.7 0 1 1 7.3 12 4.7 4.7 0 0 1 12 7.3zm0 
-7.7A3 3 0 1 0 9 12a3 3 0 0 0 3 3zm4.8-8.5a1.1 
-1.1 0 1 1-1.1-1.1 1.1 1.1 0 0 1 1.1 1.1z"/>
-</svg>
-
-Instagram
-
-</a>
+Instagram </a>
 
 <a class="social-btn" target="_blank"
 href="https://youtube.com/@Mackerein">
-
-<svg class="icon" fill="white" viewBox="0 0 24 24">
-<path d="M23.5 6.2s-.2-1.7-.9-2.5c-.9-1-1.9-1-2.4-1.1C16.8 
-2.3 12 2.3 12 2.3h0s-4.8 0-8.2.3c-.5.1-1.5.1-2.4 
-1.1C.7 4.5.5 6.2.5 6.2S.2 8.2.2 10.2v1.6c0 
-2 .3 4 .3 4s.2 1.7.9 2.5c.9 1 2.1 1 2.6 
-1.1 1.9.2 8 .3 8 .3s4.8 0 8.2-.3c.5-.1 
-1.5-.1 2.4-1.1.7-.8.9-2.5.9-2.5s.3-2 
-.3-4v-1.6c0-2-.3-4-.3-4zM9.7 
-14.6V8.9l5.5 2.9-5.5 2.8z"/>
-</svg>
-
-YouTube
-
-</a>
+YouTube </a>
 
 </div>
 
@@ -225,39 +242,82 @@ YouTube
 
 <script>
 
+/* LOADER + UNLOCK */
+
+const loader=document.getElementById("loader");
+
+function unlock(){
+
+loader.classList.add("hidden");
+
+audio.muted=false;
+audio.play();
+
+initAudio();
+revealName();
+
+document.removeEventListener("mousemove",unlock);
+document.removeEventListener("touchmove",unlock);
+
+}
+
+document.addEventListener("mousemove",unlock);
+document.addEventListener("touchmove",unlock);
+
+/* NAME REVEAL */
+
+const name="Aaryaman Shrivastav";
+const nameContainer=document.getElementById("username");
+
+name.split("").forEach(letter=>{
+const span=document.createElement("span");
+span.textContent=letter;
+span.classList.add("name-letter");
+nameContainer.appendChild(span);
+});
+
+function revealName(){
+
+const letters=document.querySelectorAll(".name-letter");
+
+letters.forEach((l,i)=>{
+setTimeout(()=>{
+l.classList.add("show");
+},i*70);
+});
+
+}
+
 /* PARTICLES */
 
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 
-function resizeCanvas(){
+function resize(){
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 }
 
-resizeCanvas();
-window.addEventListener("resize",resizeCanvas);
+resize();
+window.addEventListener("resize",resize);
 
 let particles=[];
 
-for(let i=0;i<90;i++){
-
+for(let i=0;i<100;i++){
 particles.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
 r:Math.random()*2+1,
-dx:(Math.random()-0.5)*0.6,
-dy:(Math.random()-0.5)*0.6
+dx:(Math.random()-0.5)*0.5,
+dy:(Math.random()-0.5)*0.5
 });
-
 }
 
-function animateParticles(){
+function animate(){
 
 ctx.clearRect(0,0,canvas.width,canvas.height);
 
 particles.forEach(p=>{
-
 p.x+=p.dx;
 p.y+=p.dy;
 
@@ -266,116 +326,55 @@ if(p.y<0||p.y>canvas.height) p.dy*=-1;
 
 ctx.beginPath();
 ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fillStyle="rgba(255,255,255,0.8)";
+ctx.fillStyle="white";
 ctx.fill();
-
 });
 
-requestAnimationFrame(animateParticles);
+requestAnimationFrame(animate);
 
 }
 
-animateParticles();
+animate();
 
+/* TYPEWRITER */
 
+const texts=[
+"Student @DPSI",
+"Learning Tabla",
+"Some Depths Are Too Hard To Escape"
+];
 
-/* MUSIC VISUALIZER */
+let textIndex=0;
+let charIndex=0;
+let typing=true;
 
-const audio=document.getElementById("bgMusic");
-const visCanvas=document.getElementById("visualizer");
-const vCtx=visCanvas.getContext("2d");
+const typeElement=document.getElementById("typewriter");
 
-function resizeVisualizer(){
-visCanvas.width=visCanvas.offsetWidth;
-visCanvas.height=120;
+function typeEffect(){
+
+const currentText=texts[textIndex];
+
+if(typing){
+
+typeElement.textContent=currentText.substring(0,charIndex+1);
+charIndex++;
+
+if(charIndex===currentText.length){
+typing=false;
+setTimeout(typeEffect,900);
+return;
 }
 
-resizeVisualizer();
-window.addEventListener("resize",resizeVisualizer);
+}else{
 
-let audioContext;
-let analyser;
-let source;
-let dataArray;
-let bufferLength;
+typeElement.textContent=currentText.substring(0,charIndex-1);
+charIndex--;
 
-audio.addEventListener("play",()=>{
-
-if(!audioContext){
-
-audioContext=new (window.AudioContext || window.webkitAudioContext)();
-
-analyser=audioContext.createAnalyser();
-source=audioContext.createMediaElementSource(audio);
-
-source.connect(analyser);
-analyser.connect(audioContext.destination);
-
-analyser.fftSize=256;
-
-bufferLength=analyser.frequencyBinCount;
-dataArray=new Uint8Array(bufferLength);
-
-drawVisualizer();
-
-}
-
-audioContext.resume();
-
-});
-
-function drawVisualizer(){
-
-requestAnimationFrame(drawVisualizer);
-
-if(!analyser) return;
-
-analyser.getByteFrequencyData(dataArray);
-
-vCtx.clearRect(0,0,visCanvas.width,visCanvas.height);
-
-let barWidth=(visCanvas.width/bufferLength)*2;
-let x=0;
-
-for(let i=0;i<bufferLength;i++){
-
-let barHeight=dataArray[i]/1.8;
-
-vCtx.fillStyle="rgb(255,0,80)";
-vCtx.fillRect(x,visCanvas.height-barHeight,barWidth,barHeight);
-
-x+=barWidth+1;
-
+if(charIndex===0){
+typing=true;
+textIndex=(textIndex+1)%texts.length;
 }
 
 }
 
-
-
-/* AUTOPLAY FIX */
-
-const music=document.getElementById("bgMusic");
-
-window.addEventListener("load",()=>{
-music.play().catch(()=>{});
-});
-
-function enableSound(){
-
-music.muted=false;
-music.play();
-
-document.removeEventListener("click",enableSound);
-document.removeEventListener("touchstart",enableSound);
-document.removeEventListener("keydown",enableSound);
-
-}
-
-document.addEventListener("click",enableSound);
-document.addEventListener("touchstart",enableSound);
-document.addEventListener("keydown",enableSound);
-
-</script>
-
-</body>
-</html>
+setTimeout(typeEffect, typing ? 25 : 15);
