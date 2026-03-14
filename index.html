@@ -28,7 +28,7 @@ background:url("/background.jpeg") center/cover no-repeat fixed;
 cursor:url("cursor.cur"), auto;
 }
 
-/* overlay */
+/* dark overlay */
 
 body::before{
 content:"";
@@ -37,19 +37,19 @@ inset:0;
 background:rgba(0,0,0,0.6);
 }
 
-/* enter screen */
+/* loader */
 
 #loader{
 position:fixed;
 inset:0;
-backdrop-filter:blur(25px);
-background:rgba(0,0,0,0.7);
 display:flex;
 align-items:center;
 justify-content:center;
+background:rgba(0,0,0,0.8);
+backdrop-filter:blur(30px);
 z-index:999;
-transition:opacity 1s ease;
 cursor:pointer;
+transition:opacity 1s;
 }
 
 #loader.hidden{
@@ -64,7 +64,7 @@ animation:pulse 2s infinite;
 }
 
 @keyframes pulse{
-0%,100%{opacity:0.4}
+0%,100%{opacity:.4}
 50%{opacity:1}
 }
 
@@ -76,19 +76,27 @@ inset:0;
 z-index:0;
 }
 
-/* card */
+/* glass card */
 
 .card{
 position:relative;
 z-index:2;
 padding:60px 80px;
-border-radius:25px;
-background:rgba(0,0,0,0.45);
-backdrop-filter:blur(18px);
-border:1px solid rgba(255,0,80,0.35);
-box-shadow:0 0 60px rgba(255,0,80,0.25);
+border-radius:28px;
+
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(25px) saturate(180%);
+
+border:1px solid rgba(255,255,255,0.15);
+
+box-shadow:
+0 0 80px rgba(255,0,80,0.25),
+inset 0 0 25px rgba(255,255,255,0.05);
+
 text-align:center;
 max-width:520px;
+
+transition:transform .2s ease;
 }
 
 /* name */
@@ -97,7 +105,6 @@ h1{
 font-size:46px;
 letter-spacing:6px;
 margin-bottom:15px;
-text-transform:uppercase;
 min-height:54px;
 }
 
@@ -110,17 +117,16 @@ transform:translateY(20px);
 .name-letter.show{
 opacity:1;
 transform:translateY(0);
-text-shadow:0 0 10px #fff,0 0 25px #ff0050;
-transition:all 0.4s ease;
+text-shadow:0 0 15px #fff,0 0 30px #ff0050;
+transition:.4s;
 }
 
 /* bio */
 
 .bio{
 font-size:18px;
-opacity:0.9;
 margin-bottom:30px;
-min-height:24px;
+opacity:.9;
 }
 
 .cursor{
@@ -128,21 +134,21 @@ display:inline-block;
 width:2px;
 height:18px;
 background:white;
-margin-left:5px;
+margin-left:4px;
 animation:blink 1s infinite;
 }
 
 @keyframes blink{
-0%,50%,100%{opacity:1;}
-25%,75%{opacity:0;}
+0%,50%,100%{opacity:1}
+25%,75%{opacity:0}
 }
 
 /* quotes */
 
 .quote-section{
-margin-bottom:30px;
-min-height:40px;
 position:relative;
+height:40px;
+margin-bottom:30px;
 overflow:hidden;
 }
 
@@ -151,8 +157,7 @@ position:absolute;
 width:100%;
 opacity:0;
 transform:translateY(10px);
-transition:all 0.8s ease;
-font-size:17px;
+transition:.8s;
 }
 
 .quote.active{
@@ -177,20 +182,22 @@ justify-content:center;
 }
 
 .social-btn{
+
 padding:10px 18px;
 border-radius:12px;
+
 background:rgba(255,0,80,0.15);
 border:1px solid rgba(255,0,80,0.4);
+
 color:white;
 text-decoration:none;
-font-size:15px;
-transition:0.3s;
-cursor:url("cursor.cur"), pointer;
+
+transition:.3s;
 }
 
 .social-btn:hover{
 background:rgba(255,0,80,0.5);
-box-shadow:0 0 20px rgba(255,0,80,0.9);
+box-shadow:0 0 25px rgba(255,0,80,.9);
 transform:scale(1.05);
 }
 
@@ -206,7 +213,7 @@ transform:scale(1.05);
 
 <canvas id="particles"></canvas>
 
-<div class="card">
+<div class="card" id="card">
 
 <h1 id="username"></h1>
 
@@ -224,7 +231,7 @@ transform:scale(1.05);
 <canvas id="visualizer"></canvas>
 
 <audio id="bgMusic" loop muted>
-<source src="/meaningful-love-instrumental.mp3" type="audio/mpeg">
+<source src="/meaningful-love-instrumental.mp3">
 </audio>
 
 <div class="socials">
@@ -245,98 +252,121 @@ YouTube
 
 <script>
 
-/* unlock screen */
+/* loader */
 
-const loader=document.getElementById("loader");
-const audio=document.getElementById("bgMusic");
+const loader=document.getElementById("loader")
+const audio=document.getElementById("bgMusic")
+
+document.addEventListener("click",unlock)
 
 function unlock(){
 
-loader.classList.add("hidden");
+loader.classList.add("hidden")
 
-audio.muted=false;
-audio.play();
+audio.muted=false
+audio.play()
 
-initAudio();
-revealName();
+initAudio()
+revealName()
 
-document.removeEventListener("click",unlock);
+document.removeEventListener("click",unlock)
 
 }
 
-document.addEventListener("click",unlock);
+/* animated name */
 
-/* name reveal */
+const name="A.S"
+const nameContainer=document.getElementById("username")
 
-const name="A.S";
-const nameContainer=document.getElementById("username");
-
-name.split("").forEach(letter=>{
-const span=document.createElement("span");
-span.textContent=letter;
-span.classList.add("name-letter");
-nameContainer.appendChild(span);
-});
+name.split("").forEach(l=>{
+const span=document.createElement("span")
+span.textContent=l
+span.classList.add("name-letter")
+nameContainer.appendChild(span)
+})
 
 function revealName(){
 
-const letters=document.querySelectorAll(".name-letter");
+document.querySelectorAll(".name-letter")
+.forEach((l,i)=>{
 
-letters.forEach((l,i)=>{
-setTimeout(()=>{
-l.classList.add("show");
-},i*70);
-});
+setTimeout(()=>l.classList.add("show"),i*80)
+
+})
 
 }
 
-/* particles */
+/* mouse reactive particles */
 
-const canvas=document.getElementById("particles");
-const ctx=canvas.getContext("2d");
+const canvas=document.getElementById("particles")
+const ctx=canvas.getContext("2d")
+
+let mouse={x:0,y:0}
+
+window.addEventListener("mousemove",e=>{
+mouse.x=e.clientX
+mouse.y=e.clientY
+})
 
 function resize(){
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
 }
 
-resize();
-window.addEventListener("resize",resize);
+resize()
+window.addEventListener("resize",resize)
 
-let particles=[];
+let particles=[]
 
-for(let i=0;i<100;i++){
+for(let i=0;i<120;i++){
+
 particles.push({
+
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
-r:Math.random()*2+1,
-dx:(Math.random()-0.5)*0.5,
-dy:(Math.random()-0.5)*0.5
-});
+
+dx:(Math.random()-.5)*.5,
+dy:(Math.random()-.5)*.5,
+
+r:Math.random()*2+1
+
+})
+
 }
 
-function animate(){
+function animateParticles(){
 
-ctx.clearRect(0,0,canvas.width,canvas.height);
+ctx.clearRect(0,0,canvas.width,canvas.height)
 
 particles.forEach(p=>{
-p.x+=p.dx;
-p.y+=p.dy;
 
-if(p.x<0||p.x>canvas.width) p.dx*=-1;
-if(p.y<0||p.y>canvas.height) p.dy*=-1;
+let dist=Math.hypot(mouse.x-p.x,mouse.y-p.y)
 
-ctx.beginPath();
-ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-ctx.fillStyle="white";
-ctx.fill();
-});
+if(dist<120){
 
-requestAnimationFrame(animate);
+p.x+=(p.x-mouse.x)/25
+p.y+=(p.y-mouse.y)/25
 
 }
 
-animate();
+p.x+=p.dx
+p.y+=p.dy
+
+if(p.x<0||p.x>canvas.width) p.dx*=-1
+if(p.y<0||p.y>canvas.height) p.dy*=-1
+
+ctx.beginPath()
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
+ctx.fillStyle="white"
+ctx.fill()
+
+})
+
+requestAnimationFrame(animateParticles)
+
+}
+
+animateParticles()
 
 /* typewriter */
 
@@ -344,116 +374,132 @@ const texts=[
 "Student @DPSI",
 "Learning Tabla",
 "Some Depths Are Too Hard To Escape"
-];
+]
 
-let textIndex=0;
-let charIndex=0;
-let typing=true;
+let textIndex=0
+let charIndex=0
+let typing=true
 
-const typeElement=document.getElementById("typewriter");
+const typeElement=document.getElementById("typewriter")
 
 function typeEffect(){
 
-const currentText=texts[textIndex];
+let current=texts[textIndex]
 
 if(typing){
 
-typeElement.textContent=currentText.substring(0,charIndex+1);
-charIndex++;
-
-if(charIndex===currentText.length){
-typing=false;
-setTimeout(typeEffect,1000);
-return;
+typeElement.textContent=current.substring(0,charIndex++)
+if(charIndex>current.length){
+typing=false
+setTimeout(typeEffect,1000)
+return
 }
 
 }else{
 
-typeElement.textContent=currentText.substring(0,charIndex-1);
-charIndex--;
-
-if(charIndex===0){
-typing=true;
-textIndex=(textIndex+1)%texts.length;
+typeElement.textContent=current.substring(0,charIndex--)
+if(charIndex==0){
+typing=true
+textIndex=(textIndex+1)%texts.length
 }
 
 }
 
-setTimeout(typeEffect, typing ? 40 : 25);
+setTimeout(typeEffect,typing?40:25)
 
 }
 
-typeEffect();
+typeEffect()
 
 /* quotes */
 
-const quotes=document.querySelectorAll(".quote");
-let current=0;
+const quotes=document.querySelectorAll(".quote")
+let current=0
 
 setInterval(()=>{
-quotes[current].classList.remove("active");
-current=(current+1)%quotes.length;
-quotes[current].classList.add("active");
-},5000);
 
-/* audio visualizer */
+quotes[current].classList.remove("active")
+current=(current+1)%quotes.length
+quotes[current].classList.add("active")
 
-const vis=document.getElementById("visualizer");
-const vctx=vis.getContext("2d");
+},5000)
 
-vis.width=vis.offsetWidth;
-vis.height=120;
+/* spotify style visualizer */
 
-let audioCtx;
-let analyser;
-let source;
-let dataArray;
-let bufferLength;
+const vis=document.getElementById("visualizer")
+const vctx=vis.getContext("2d")
+
+vis.width=vis.offsetWidth
+vis.height=120
+
+let audioCtx
+let analyser
+let source
+let dataArray
 
 function initAudio(){
 
-if(audioCtx) return;
+audioCtx=new (window.AudioContext||window.webkitAudioContext)()
 
-audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+analyser=audioCtx.createAnalyser()
+analyser.fftSize=256
 
-analyser=audioCtx.createAnalyser();
+source=audioCtx.createMediaElementSource(audio)
 
-source=audioCtx.createMediaElementSource(audio);
+source.connect(analyser)
+analyser.connect(audioCtx.destination)
 
-source.connect(analyser);
-analyser.connect(audioCtx.destination);
+dataArray=new Uint8Array(analyser.frequencyBinCount)
 
-analyser.fftSize=256;
-
-bufferLength=analyser.frequencyBinCount;
-
-dataArray=new Uint8Array(bufferLength);
-
-draw();
+draw()
 
 }
 
 function draw(){
 
-requestAnimationFrame(draw);
+requestAnimationFrame(draw)
 
-if(!analyser) return;
+if(!analyser) return
 
-analyser.getByteFrequencyData(dataArray);
+analyser.getByteFrequencyData(dataArray)
 
-vctx.clearRect(0,0,vis.width,vis.height);
+vctx.clearRect(0,0,vis.width,vis.height)
 
-let barWidth=(vis.width/bufferLength)*2;
-let x=0;
+let center=vis.height/2
+let bars=70
+let spacing=vis.width/bars
+let active=32
 
-for(let i=0;i<bufferLength;i++){
+for(let i=0;i<bars;i++){
 
-let h=dataArray[i]/1.8;
+let x=i*spacing
 
-vctx.fillStyle="rgb(255,0,80)";
-vctx.fillRect(x,vis.height-h,barWidth,h);
+let isActive=i>(bars/2-active/2)&&i<(bars/2+active/2)
 
-x+=barWidth+1;
+if(isActive){
+
+let index=Math.floor((i/bars)*dataArray.length)
+
+let value=dataArray[index]/255
+
+let height=value*70
+
+vctx.fillStyle="rgb(255,0,80)"
+
+/* up */
+
+vctx.fillRect(x,center-height,spacing*.6,height)
+
+/* down */
+
+vctx.fillRect(x,center,spacing*.6,height)
+
+}else{
+
+vctx.fillStyle="rgba(255,0,80,.4)"
+vctx.fillRect(x,center-1,spacing*.6,2)
+
+}
 
 }
 
