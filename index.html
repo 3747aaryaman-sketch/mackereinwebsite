@@ -1,187 +1,331 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>A.S</title>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Aaryaman Shrivastav</title>
 
 <style>
-600;800&display=swap');
 
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+/* CUSTOM CURSOR */
 
 body{
-  height:100vh;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family: Georgia, "Times New Roman", serif;
-  color:white;
-  background:url("background.jpeg") center/cover no-repeat fixed;
+cursor:url("/cursor.cur"), auto;
+}
+
+/* page layout */
+
+body{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:Georgia, "Times New Roman", serif;
+overflow:hidden;
+color:white;
+background:url("/background.jpg") center/cover no-repeat fixed;
 }
 
 /* dark overlay */
+
 body::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,0.45);
+content:"";
+position:absolute;
+inset:0;
+background:rgba(0,0,0,0.55);
 }
 
-/* grid HUD effect */
+/* grid effect */
+
 body::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:linear-gradient(rgba(255,0,60,0.15) 1px,transparent 1px),
-                   linear-gradient(90deg,rgba(255,0,60,0.15) 1px,transparent 1px);
-  background-size:60px 60px;
-  pointer-events:none;
+content:"";
+position:absolute;
+inset:0;
+
+background-image:
+linear-gradient(rgba(255,0,80,0.12) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,0,80,0.12) 1px,transparent 1px);
+
+background-size:60px 60px;
+pointer-events:none;
 }
+
+/* particles */
 
 #particles{
-  position:absolute;
-  inset:0;
-  z-index:0;
+position:absolute;
+inset:0;
+z-index:0;
 }
+
+/* card */
 
 .card{
-  position:relative;
-  z-index:2;
-  backdrop-filter: blur(18px);
-  background: rgba(0,0,0,0.45);
-  border:1px solid rgba(255,0,80,0.5);
-  border-radius:22px;
-  padding:80px 100px;
-  text-align:center;
-  box-shadow:0 0 40px rgba(255,0,80,0.5);
-  
+
+position:relative;
+z-index:2;
+
+padding:70px 90px;
+
+border-radius:25px;
+
+background:rgba(0,0,0,0.45);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,0,80,0.35);
+
+box-shadow:0 0 50px rgba(255,0,80,0.35);
+
+text-align:center;
+
+max-width:520px;
+
+transition:0.4s;
+
 }
+
+.card:hover{
+box-shadow:0 0 80px rgba(255,0,80,0.7);
+}
+
+/* title */
 
 h1{
-  font-size:48px;
-  margin-bottom:16px;
-  letter-spacing:6px;
-  text-transform:uppercase;
-  color:#ffffff;
-  text-shadow:0 0 10px rgba(255,255,255,0.4);
+
+font-size:44px;
+
+letter-spacing:6px;
+
+margin-bottom:12px;
+
+text-transform:uppercase;
+
+text-shadow:0 0 10px rgba(255,255,255,0.5);
+
 }
+
+/* subtitle */
 
 p{
-  font-size:20px;
-  letter-spacing:2px;
-  color:#ffffff;
-  opacity:0.9;
+
+font-size:18px;
+
+letter-spacing:1.5px;
+
+opacity:0.9;
+
 }
 
-.visualizer{
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  margin-top:40px;
-  height:40px;
+/* visualizer */
+
+#visualizer{
+
+width:100%;
+
+height:120px;
+
+margin-top:35px;
+
 }
 
-.bar{
-  width:5px;
-  height:10px;
-  background:#ff004c;
-  box-shadow:0 0 10px #ff004c;
-  animation:music 1s infinite ease-in-out;
-}
+/* audio */
 
-.bar:nth-child(2){animation-delay:0.2s}
-.bar:nth-child(3){animation-delay:0.4s}
-.bar:nth-child(4){animation-delay:0.6s}
-.bar:nth-child(5){animation-delay:0.8s}
+audio{
 
-@keyframes music{
-  0%{height:8px}
-  50%{height:35px}
-  100%{height:8px}
+margin-top:25px;
+
+width:100%;
+
 }
 
 </style>
+
 </head>
 
 <body>
 
 <canvas id="particles"></canvas>
 
+<div class="card">
 
+<h1>Aaryaman Shrivastav</h1>
 
-<div class="card" id="card">
-  <h1>A.S</h1>
-  <p>Posters,Philosophy and Music</p>
+<p>I like philosophy and music</p>
 
-  <div class="visualizer">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
+<canvas id="visualizer"></canvas>
 
-  <audio id="bgMusic" controls loop style="margin-top:25px;">
-    <source src="meaningful-love-instrumental.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
+<audio id="bgMusic" autoplay loop muted>
+
+<source src="/meaningful-love-instrumental.mp3" type="audio/mpeg">
+
+</audio>
+
 </div>
 
 <script>
+
+/* PARTICLE BACKGROUND */
+
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 
+function resizeCanvas(){
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
+}
+
+resizeCanvas();
+window.addEventListener("resize",resizeCanvas);
 
 let particles=[];
 
 for(let i=0;i<90;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:Math.random()*2+1,
-    dx:(Math.random()-0.5)*0.5,
-    dy:(Math.random()-0.5)*0.5
-  });
-}
 
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  particles.forEach(p=>{
-    p.x+=p.dx;
-    p.y+=p.dy;
-
-    if(p.x<0||p.x>canvas.width) p.dx*=-1;
-    if(p.y<0||p.y>canvas.height) p.dy*=-1;
-
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle="rgba(255,255,255,0.7)";
-    ctx.fill();
-  });
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-
-
-window.addEventListener("resize",()=>{
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2+1,
+dx:(Math.random()-0.5)*0.6,
+dy:(Math.random()-0.5)*0.6
 });
+
+}
+
+function animateParticles(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+particles.forEach(p=>{
+
+p.x+=p.dx;
+p.y+=p.dy;
+
+if(p.x<0||p.x>canvas.width) p.dx*=-1;
+if(p.y<0||p.y>canvas.height) p.dy*=-1;
+
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fillStyle="rgba(255,255,255,0.8)";
+ctx.fill();
+
+});
+
+requestAnimationFrame(animateParticles);
+
+}
+
+animateParticles();
+
+
+
+/* MUSIC VISUALIZER */
+
+const audio=document.getElementById("bgMusic");
+const visCanvas=document.getElementById("visualizer");
+const vCtx=visCanvas.getContext("2d");
+
+function resizeVisualizer(){
+visCanvas.width=visCanvas.offsetWidth;
+visCanvas.height=120;
+}
+
+resizeVisualizer();
+window.addEventListener("resize",resizeVisualizer);
+
+let audioContext;
+let analyser;
+let source;
+let dataArray;
+let bufferLength;
+
+audio.addEventListener("play",()=>{
+
+if(!audioContext){
+
+audioContext=new (window.AudioContext || window.webkitAudioContext)();
+
+analyser=audioContext.createAnalyser();
+source=audioContext.createMediaElementSource(audio);
+
+source.connect(analyser);
+analyser.connect(audioContext.destination);
+
+analyser.fftSize=256;
+
+bufferLength=analyser.frequencyBinCount;
+dataArray=new Uint8Array(bufferLength);
+
+drawVisualizer();
+
+}
+
+audioContext.resume();
+
+});
+
+function drawVisualizer(){
+
+requestAnimationFrame(drawVisualizer);
+
+if(!analyser) return;
+
+analyser.getByteFrequencyData(dataArray);
+
+vCtx.clearRect(0,0,visCanvas.width,visCanvas.height);
+
+let barWidth=(visCanvas.width/bufferLength)*2;
+let x=0;
+
+for(let i=0;i<bufferLength;i++){
+
+let barHeight=dataArray[i]/1.8;
+
+vCtx.fillStyle="rgb(255,0,80)";
+vCtx.fillRect(x,visCanvas.height-barHeight,barWidth,barHeight);
+
+x+=barWidth+1;
+
+}
+
+}
+
+
+
+/* AUTOPLAY FIX */
+
+const music=document.getElementById("bgMusic");
+
+window.addEventListener("load",()=>{
+music.play().catch(()=>{});
+});
+
+function enableSound(){
+
+music.muted=false;
+music.play();
+
+document.removeEventListener("click",enableSound);
+document.removeEventListener("touchstart",enableSound);
+document.removeEventListener("keydown",enableSound);
+
+}
+
+document.addEventListener("click",enableSound);
+document.addEventListener("touchstart",enableSound);
+document.addEventListener("keydown",enableSound);
 
 </script>
 
 </body>
+
 </html>
