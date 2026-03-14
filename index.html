@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -50,6 +49,7 @@ justify-content:center;
 flex-direction:column;
 z-index:999;
 transition:opacity 1.2s ease;
+cursor:pointer;
 }
 
 #loader.hidden{
@@ -200,7 +200,7 @@ transform:scale(1.05);
 <body>
 
 <div id="loader">
-<div class="loader-text">Move your mouse</div>
+<div class="loader-text">Enter...</div>
 </div>
 
 <canvas id="particles"></canvas>
@@ -230,11 +230,13 @@ transform:scale(1.05);
 
 <a class="social-btn" target="_blank"
 href="https://www.instagram.com/aaryaman_shrivastav/?hl=en">
-Instagram </a>
+Instagram
+</a>
 
 <a class="social-btn" target="_blank"
 href="https://youtube.com/@Mackerein">
-YouTube </a>
+YouTube
+</a>
 
 </div>
 
@@ -242,9 +244,10 @@ YouTube </a>
 
 <script>
 
-/* LOADER + UNLOCK */
+/* LOADER CLICK UNLOCK */
 
 const loader=document.getElementById("loader");
+const audio=document.getElementById("bgMusic");
 
 function unlock(){
 
@@ -256,13 +259,13 @@ audio.play();
 initAudio();
 revealName();
 
-document.removeEventListener("mousemove",unlock);
-document.removeEventListener("touchmove",unlock);
+document.removeEventListener("click",unlock);
+document.removeEventListener("touchstart",unlock);
 
 }
 
-document.addEventListener("mousemove",unlock);
-document.addEventListener("touchmove",unlock);
+document.addEventListener("click",unlock);
+document.addEventListener("touchstart",unlock);
 
 /* NAME REVEAL */
 
@@ -378,3 +381,86 @@ textIndex=(textIndex+1)%texts.length;
 }
 
 setTimeout(typeEffect, typing ? 25 : 15);
+
+}
+
+typeEffect();
+
+/* QUOTES */
+
+const quotes=document.querySelectorAll(".quote");
+let current=0;
+
+setInterval(()=>{
+quotes[current].classList.remove("active");
+current=(current+1)%quotes.length;
+quotes[current].classList.add("active");
+},5000);
+
+/* VISUALIZER */
+
+const vis=document.getElementById("visualizer");
+const vctx=vis.getContext("2d");
+
+vis.width=vis.offsetWidth;
+vis.height=120;
+
+let audioCtx;
+let analyser;
+let source;
+let dataArray;
+let bufferLength;
+
+function initAudio(){
+
+if(audioCtx) return;
+
+audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+
+analyser=audioCtx.createAnalyser();
+
+source=audioCtx.createMediaElementSource(audio);
+
+source.connect(analyser);
+analyser.connect(audioCtx.destination);
+
+analyser.fftSize=256;
+
+bufferLength=analyser.frequencyBinCount;
+
+dataArray=new Uint8Array(bufferLength);
+
+draw();
+
+}
+
+function draw(){
+
+requestAnimationFrame(draw);
+
+if(!analyser) return;
+
+analyser.getByteFrequencyData(dataArray);
+
+vctx.clearRect(0,0,vis.width,vis.height);
+
+let barWidth=(vis.width/bufferLength)*2;
+let x=0;
+
+for(let i=0;i<bufferLength;i++){
+
+let h=dataArray[i]/1.8;
+
+vctx.fillStyle="rgb(255,0,80)";
+vctx.fillRect(x,vis.height-h,barWidth,h);
+
+x+=barWidth+1;
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
