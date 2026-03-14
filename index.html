@@ -92,7 +92,7 @@ text-align:center;
 max-width:520px;
 }
 
-/* neon name */
+/* name */
 
 h1{
 font-size:46px;
@@ -121,14 +121,16 @@ transition:all 0.4s ease;
 font-size:18px;
 opacity:0.9;
 margin-bottom:30px;
-height:22px;
+min-width:260px;
+height:24px;
 }
 
 .cursor{
 display:inline-block;
 width:2px;
+height:18px;
 background:white;
-margin-left:4px;
+margin-left:5px;
 animation:blink 1s infinite;
 }
 
@@ -244,7 +246,7 @@ YouTube
 
 <script>
 
-/* LOADER CLICK UNLOCK */
+/* loader unlock */
 
 const loader=document.getElementById("loader");
 const audio=document.getElementById("bgMusic");
@@ -267,7 +269,7 @@ document.removeEventListener("touchstart",unlock);
 document.addEventListener("click",unlock);
 document.addEventListener("touchstart",unlock);
 
-/* NAME REVEAL */
+/* name reveal */
 
 const name="Aaryaman Shrivastav";
 const nameContainer=document.getElementById("username");
@@ -291,7 +293,7 @@ l.classList.add("show");
 
 }
 
-/* PARTICLES */
+/* particles */
 
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
@@ -339,7 +341,7 @@ requestAnimationFrame(animate);
 
 animate();
 
-/* TYPEWRITER */
+/* typewriter */
 
 const texts=[
 "Student @DPSI",
@@ -364,7 +366,7 @@ charIndex++;
 
 if(charIndex===currentText.length){
 typing=false;
-setTimeout(typeEffect,900);
+setTimeout(typeEffect,1000);
 return;
 }
 
@@ -380,13 +382,13 @@ textIndex=(textIndex+1)%texts.length;
 
 }
 
-setTimeout(typeEffect, typing ? 25 : 15);
+setTimeout(typeEffect, typing ? 40 : 25);
 
 }
 
 typeEffect();
 
-/* QUOTES */
+/* quotes */
 
 const quotes=document.querySelectorAll(".quote");
 let current=0;
@@ -397,7 +399,7 @@ current=(current+1)%quotes.length;
 quotes[current].classList.add("active");
 },5000);
 
-/* VISUALIZER */
+/* visualizer */
 
 const vis=document.getElementById("visualizer");
 const vctx=vis.getContext("2d");
