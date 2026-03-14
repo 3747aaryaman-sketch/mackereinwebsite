@@ -4,7 +4,7 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>A.S</title>
 
@@ -23,8 +23,8 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-family:Georgia,serif;
-color:white;
 overflow:hidden;
+color:white;
 
 background:url("/background.jpeg") center/cover no-repeat fixed;
 
@@ -33,31 +33,13 @@ padding:20px;
 
 }
 
-/* overlay */
+/* dark overlay */
 
 body::before{
 content:"";
 position:absolute;
 inset:0;
 background:rgba(0,0,0,0.6);
-z-index:0;
-}
-
-/* wave background */
-
-#waveCanvas{
-position:absolute;
-inset:0;
-z-index:0;
-opacity:.25;
-}
-
-/* particles */
-
-#particles{
-position:absolute;
-inset:0;
-z-index:1;
 }
 
 /* loader */
@@ -70,10 +52,9 @@ align-items:center;
 justify-content:center;
 
 background:rgba(0,0,0,0.85);
-backdrop-filter:blur(30px);
+backdrop-filter:blur(25px);
 
 z-index:999;
-
 cursor:pointer;
 
 transition:opacity 1s;
@@ -95,7 +76,15 @@ animation:pulse 2s infinite;
 50%{opacity:1}
 }
 
-/* glass card */
+/* particles */
+
+#particles{
+position:absolute;
+inset:0;
+z-index:0;
+}
+
+/* card */
 
 .card{
 
@@ -120,8 +109,6 @@ inset 0 0 25px rgba(255,255,255,0.05);
 
 text-align:center;
 
-transition:transform .2s ease;
-
 }
 
 /* name */
@@ -140,10 +127,16 @@ transform:translateY(20px);
 }
 
 .name-letter.show{
+
 opacity:1;
 transform:translateY(0);
-text-shadow:0 0 15px #fff,0 0 30px #ff0050;
+
+text-shadow:
+0 0 15px #fff,
+0 0 30px #ff0050;
+
 transition:.4s;
+
 }
 
 /* bio */
@@ -152,6 +145,7 @@ transition:.4s;
 font-size:clamp(14px,3vw,18px);
 margin-bottom:25px;
 opacity:.9;
+min-height:22px;
 }
 
 .cursor{
@@ -175,6 +169,7 @@ position:relative;
 height:40px;
 margin-bottom:25px;
 overflow:hidden;
+font-size:clamp(13px,3vw,16px);
 }
 
 .quote{
@@ -194,7 +189,7 @@ transform:translateY(0);
 
 #visualizer{
 width:100%;
-height:110px;
+height:100px;
 }
 
 /* socials */
@@ -222,14 +217,33 @@ border:1px solid rgba(255,0,80,0.4);
 color:white;
 text-decoration:none;
 
+font-size:14px;
+
 transition:.3s;
 
 }
 
 .social-btn:hover{
+
 background:rgba(255,0,80,0.5);
 box-shadow:0 0 25px rgba(255,0,80,.9);
+
 transform:scale(1.05);
+
+}
+
+/* small phones */
+
+@media (max-width:420px){
+
+.card{
+padding:28px 22px;
+}
+
+.quote-section{
+height:48px;
+}
+
 }
 
 </style>
@@ -239,13 +253,12 @@ transform:scale(1.05);
 <body>
 
 <div id="loader">
-<div class="loader-text">Tap / Click</div>
+<div class="loader-text">Tap To Enter</div>
 </div>
 
-<canvas id="waveCanvas"></canvas>
 <canvas id="particles"></canvas>
 
-<div class="card" id="card">
+<div class="card">
 
 <h1 id="username"></h1>
 
@@ -272,21 +285,21 @@ transform:scale(1.05);
 
 <a class="social-btn"
 href="https://www.instagram.com/aaryaman_shrivastav/?hl=en"
-target="_blank">Instagram</a>
+target="_blank">
+Instagram
+</a>
 
 <a class="social-btn"
 href="https://youtube.com/@Mackerein"
-target="_blank">YouTube</a>
+target="_blank">
+YouTube
+</a>
 
 </div>
 
 </div>
 
 <script>
-
-/* detect device */
-
-const isMobile = window.innerWidth < 768
 
 /* loader */
 
@@ -309,66 +322,58 @@ document.removeEventListener("click",unlock)
 
 }
 
-/* animated name */
+/* name animation */
 
 const name="A.S"
 const container=document.getElementById("username")
 
 name.split("").forEach(l=>{
+
 const span=document.createElement("span")
+
 span.textContent=l
 span.classList.add("name-letter")
+
 container.appendChild(span)
+
 })
 
 function revealName(){
 
 document.querySelectorAll(".name-letter")
 .forEach((l,i)=>{
+
 setTimeout(()=>l.classList.add("show"),i*80)
-})
-
-}
-
-/* 3D CARD TILT */
-
-const card=document.getElementById("card")
-
-if(!isMobile){
-
-document.addEventListener("mousemove",(e)=>{
-
-const x=(window.innerWidth/2-e.clientX)/25
-const y=(window.innerHeight/2-e.clientY)/25
-
-card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`
-
-})
-
-}else{
-
-document.addEventListener("touchmove",(e)=>{
-
-const t=e.touches[0]
-
-const x=(window.innerWidth/2-t.clientX)/35
-const y=(window.innerHeight/2-t.clientY)/35
-
-card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`
 
 })
 
 }
 
-/* PARTICLES WITH TRAILS */
+/* particles */
 
 const canvas=document.getElementById("particles")
 const ctx=canvas.getContext("2d")
 
-canvas.width=innerWidth
-canvas.height=innerHeight
+let mouse={x:0,y:0}
 
-let particleCount=isMobile?60:140
+window.addEventListener("mousemove",e=>{
+mouse.x=e.clientX
+mouse.y=e.clientY
+})
+
+function resize(){
+
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
+
+}
+
+resize()
+window.addEventListener("resize",resize)
+
+/* adaptive particle count */
+
+const particleCount=window.innerWidth<600?60:120
 
 let particles=[]
 
@@ -379,8 +384,8 @@ particles.push({
 x:Math.random()*canvas.width,
 y:Math.random()*canvas.height,
 
-dx:(Math.random()-.5)*.5,
-dy:(Math.random()-.5)*.5,
+dx:(Math.random()-.5)*.4,
+dy:(Math.random()-.5)*.4,
 
 r:Math.random()*2+1
 
@@ -388,18 +393,26 @@ r:Math.random()*2+1
 
 }
 
-function animateParticles(){
+function animate(){
 
-ctx.fillStyle="rgba(0,0,0,0.1)"
-ctx.fillRect(0,0,canvas.width,canvas.height)
+ctx.clearRect(0,0,canvas.width,canvas.height)
 
 particles.forEach(p=>{
+
+let dist=Math.hypot(mouse.x-p.x,mouse.y-p.y)
+
+if(dist<120){
+
+p.x+=(p.x-mouse.x)/30
+p.y+=(p.y-mouse.y)/30
+
+}
 
 p.x+=p.dx
 p.y+=p.dy
 
-if(p.x<0||p.x>canvas.width)p.dx*=-1
-if(p.y<0||p.y>canvas.height)p.dy*=-1
+if(p.x<0||p.x>canvas.width) p.dx*=-1
+if(p.y<0||p.y>canvas.height) p.dy*=-1
 
 ctx.beginPath()
 ctx.arc(p.x,p.y,p.r,0,Math.PI*2)
@@ -408,52 +421,13 @@ ctx.fill()
 
 })
 
-requestAnimationFrame(animateParticles)
+requestAnimationFrame(animate)
 
 }
 
-animateParticles()
+animate()
 
-/* WAVE BACKGROUND */
-
-const wave=document.getElementById("waveCanvas")
-const wctx=wave.getContext("2d")
-
-wave.width=innerWidth
-wave.height=innerHeight
-
-let t=0
-
-function drawWave(){
-
-wctx.clearRect(0,0,wave.width,wave.height)
-
-for(let j=0;j<3;j++){
-
-wctx.beginPath()
-
-for(let x=0;x<wave.width;x++){
-
-let y=Math.sin(x*0.01+t+j)*20+wave.height/2
-
-wctx.lineTo(x,y)
-
-}
-
-wctx.strokeStyle="rgba(255,0,80,0.15)"
-wctx.stroke()
-
-}
-
-t+=0.02
-
-requestAnimationFrame(drawWave)
-
-}
-
-drawWave()
-
-/* TYPEWRITER */
+/* typewriter */
 
 const texts=[
 "Student @DPSI",
@@ -509,19 +483,26 @@ quotes[current].classList.add("active")
 
 },5000)
 
-/* VISUALIZER */
+/* visualizer */
 
 const vis=document.getElementById("visualizer")
 const vctx=vis.getContext("2d")
 
+function resizeVis(){
+
 vis.width=vis.offsetWidth
-vis.height=110
+vis.height=100
+
+}
+
+resizeVis()
+window.addEventListener("resize",resizeVis)
 
 let audioCtx,analyser,source,dataArray
 
 function initAudio(){
 
-audioCtx=new(window.AudioContext||window.webkitAudioContext)()
+audioCtx=new (window.AudioContext||window.webkitAudioContext)()
 
 analyser=audioCtx.createAnalyser()
 analyser.fftSize=256
@@ -541,21 +522,21 @@ function draw(){
 
 requestAnimationFrame(draw)
 
-if(!analyser)return
+if(!analyser) return
 
 analyser.getByteFrequencyData(dataArray)
 
 vctx.clearRect(0,0,vis.width,vis.height)
 
 let center=vis.height/2
-let bars=isMobile?40:70
+let bars=60
 let spacing=vis.width/bars
 
 for(let i=0;i<bars;i++){
 
 let index=Math.floor((i/bars)*dataArray.length)
 let value=dataArray[index]/255
-let height=value*70
+let height=value*60
 
 let x=i*spacing
 
