@@ -25,6 +25,7 @@ font-family:Georgia,serif;
 overflow:hidden;
 color:white;
 background:url("/background.jpeg") center/cover no-repeat fixed;
+cursor:url("cursor.cur"), auto;
 }
 
 /* overlay */
@@ -36,19 +37,18 @@ inset:0;
 background:rgba(0,0,0,0.6);
 }
 
-/* loader */
+/* enter screen */
 
 #loader{
 position:fixed;
 inset:0;
 backdrop-filter:blur(25px);
-background:rgba(0,0,0,0.65);
+background:rgba(0,0,0,0.7);
 display:flex;
 align-items:center;
 justify-content:center;
-flex-direction:column;
 z-index:999;
-transition:opacity 1.2s ease;
+transition:opacity 1s ease;
 cursor:pointer;
 }
 
@@ -58,9 +58,8 @@ pointer-events:none;
 }
 
 .loader-text{
-font-size:22px;
+font-size:24px;
 letter-spacing:4px;
-opacity:0.8;
 animation:pulse 2s infinite;
 }
 
@@ -121,8 +120,7 @@ transition:all 0.4s ease;
 font-size:18px;
 opacity:0.9;
 margin-bottom:30px;
-min-width:260px;
-height:24px;
+min-height:24px;
 }
 
 .cursor{
@@ -143,18 +141,18 @@ animation:blink 1s infinite;
 
 .quote-section{
 margin-bottom:30px;
-min-height:50px;
-overflow:hidden;
+min-height:40px;
 position:relative;
+overflow:hidden;
 }
 
 .quote{
-font-size:17px;
-opacity:0;
-transform:translateY(15px);
-transition:all 1s ease;
 position:absolute;
 width:100%;
+opacity:0;
+transform:translateY(10px);
+transition:all 0.8s ease;
+font-size:17px;
 }
 
 .quote.active{
@@ -187,6 +185,7 @@ color:white;
 text-decoration:none;
 font-size:15px;
 transition:0.3s;
+cursor:url("cursor.cur"), pointer;
 }
 
 .social-btn:hover{
@@ -216,10 +215,10 @@ transform:scale(1.05);
 </p>
 
 <div class="quote-section">
-<div class="quote active">Without music, life would be a mistake — Nietzsche</div>
-<div class="quote">Where words fail, music speaks — Andersen</div>
-<div class="quote">The unexamined life is not worth living — Socrates</div>
-<div class="quote">Music expresses what cannot be said — Victor Hugo</div>
+<div class="quote active">Music speaks where words cannot.</div>
+<div class="quote">Some depths of the mind cannot be explained.</div>
+<div class="quote">Silence often carries the loudest thoughts.</div>
+<div class="quote">Understanding yourself is the hardest philosophy.</div>
 </div>
 
 <canvas id="visualizer"></canvas>
@@ -246,7 +245,7 @@ YouTube
 
 <script>
 
-/* loader unlock */
+/* unlock screen */
 
 const loader=document.getElementById("loader");
 const audio=document.getElementById("bgMusic");
@@ -262,16 +261,14 @@ initAudio();
 revealName();
 
 document.removeEventListener("click",unlock);
-document.removeEventListener("touchstart",unlock);
 
 }
 
 document.addEventListener("click",unlock);
-document.addEventListener("touchstart",unlock);
 
 /* name reveal */
 
-const name="Aaryaman Shrivastav";
+const name="A.S";
 const nameContainer=document.getElementById("username");
 
 name.split("").forEach(letter=>{
@@ -399,7 +396,7 @@ current=(current+1)%quotes.length;
 quotes[current].classList.add("active");
 },5000);
 
-/* visualizer */
+/* audio visualizer */
 
 const vis=document.getElementById("visualizer");
 const vctx=vis.getContext("2d");
