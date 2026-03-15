@@ -3,7 +3,6 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -187,20 +186,26 @@ height:110px;
 margin-top:10px;
 }
 
-/* speaker */
+/* speaker button */
 
 .speaker-btn{
-margin-top:10px;
+margin-top:12px;
 background:none;
 border:none;
 cursor:pointer;
 }
 
 .speaker-btn svg{
-width:28px;
-height:28px;
+width:30px;
+height:30px;
 fill:white;
-opacity:.85;
+opacity:.9;
+transition:.2s;
+}
+
+.speaker-btn:hover svg{
+transform:scale(1.1);
+opacity:1;
 }
 
 /* socials */
@@ -237,7 +242,7 @@ transform:scale(1.05);
 <body>
 
 <div id="loader">
-<div class="loader-text">Loading...Click to Enter!</div>
+<div class="loader-text">Tap To Enter</div>
 </div>
 
 <canvas id="particles"></canvas>
@@ -262,9 +267,12 @@ transform:scale(1.05);
 <canvas id="visualizer"></canvas>
 
 <button class="speaker-btn" id="speakerBtn">
+
 <svg id="speakerIcon" viewBox="0 0 24 24">
 <path d="M3 9v6h4l5 4V5L7 9H3z"/>
+<path d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="white" stroke-width="2" fill="none"/>
 </svg>
+
 </button>
 
 <audio id="bgMusic" loop muted>
@@ -296,7 +304,7 @@ revealName()
 document.removeEventListener("click",unlock)
 }
 
-/* name */
+/* name animation */
 
 const name="A.S"
 const container=document.getElementById("username")
@@ -318,15 +326,15 @@ setTimeout(()=>l.classList.add("show"),i*80)
 /* typewriter */
 
 const texts=[
-"Graphic Designer",
-"User suspected of being too cool",
-"Into posters and stuff",
-"DM me on IG!!!"
+"Student @DPSI",
+"Learning Tabla",
+"Some Depths Are Too Hard To Escape"
 ]
 
 let textIndex=0
 let charIndex=0
 let typing=true
+
 const typeElement=document.getElementById("typewriter")
 
 function typeEffect(){
@@ -369,7 +377,7 @@ current=(current+1)%quotes.length
 quotes[current].classList.add("active")
 },5000)
 
-/* speaker */
+/* speaker toggle */
 
 const speakerBtn=document.getElementById("speakerBtn")
 const speakerIcon=document.getElementById("speakerIcon")
@@ -377,11 +385,14 @@ const speakerIcon=document.getElementById("speakerIcon")
 let muted=false
 
 speakerBtn.onclick=()=>{
+
 muted=!muted
 audio.muted=muted
-speakerIcon.innerHTML=muted
-? `<path d="M16 12l5 5-1.5 1.5L14.5 13.5 10 18H6v-6H3V9h3V3h4l5 4z"/>`
-: `<path d="M3 9v6h4l5 4V5L7 9H3z"/>`
+
+speakerIcon.innerHTML = muted
+? `<path d="M3 9v6h4l5 4V5L7 9H3z"/><line x1="18" y1="6" x2="22" y2="18" stroke="white" stroke-width="2"/>`
+: `<path d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="white" stroke-width="2" fill="none"/>`
+
 }
 
 /* visualizer */
@@ -397,14 +408,14 @@ vis.height=110
 resizeVis()
 window.addEventListener("resize",resizeVis)
 
-let audioCtx,analyser,source,dataArray
+let audioCtx,analyser,source,dataArray,prevHeights=[]
 
 function initAudio(){
 
 audioCtx=new (window.AudioContext||window.webkitAudioContext)()
 
 analyser=audioCtx.createAnalyser()
-analyser.fftSize=512
+analyser.fftSize=1024
 
 source=audioCtx.createMediaElementSource(audio)
 
@@ -435,22 +446,27 @@ vctx.fillStyle="rgb(255,0,80)"
 
 for(let i=0;i<bars;i++){
 
-let index=Math.floor((i/bars)*dataArray.length)
-let value=dataArray[index]/255
-let height=value*70
+let freqIndex=Math.floor((i/bars)*dataArray.length)
+
+let value=dataArray[freqIndex]/255
+let target=value*70
+
+if(!prevHeights[i]) prevHeights[i]=0
+prevHeights[i]+= (target-prevHeights[i])*0.25
+
+let height=prevHeights[i]
 
 let x=i*barWidth
 let y=baseline-height
-let radius=barWidth/2
+let r=barWidth/2
 
 vctx.beginPath()
-vctx.moveTo(x,y+radius)
-vctx.arcTo(x,y,x+barWidth,y,radius)
-vctx.arcTo(x+barWidth,y,x+barWidth,y+height,radius)
+vctx.moveTo(x,y+r)
+vctx.arcTo(x,y,x+barWidth,y,r)
+vctx.arcTo(x+barWidth,y,x+barWidth,y+height,r)
 vctx.lineTo(x+barWidth,y+height)
 vctx.lineTo(x,y+height)
 vctx.closePath()
-
 vctx.fill()
 
 }
