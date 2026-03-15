@@ -3,11 +3,10 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Aaryaman</title>
+<title>mac</title>
 
 <style>
 
@@ -18,185 +17,222 @@ box-sizing:border-box;
 }
 
 body{
-
-height:100vh;
-font-family:Inter,system-ui,Arial;
-
+min-height:100dvh;
 display:flex;
 align-items:center;
 justify-content:center;
-
-background:url("background.jpeg") center/cover no-repeat fixed;
-
+font-family:Georgia,serif;
+overflow:hidden;
 color:white;
-
+background:url("/background.gif") center/cover no-repeat fixed;
+cursor:url("cursor.cur"), auto;
+padding:20px;
 }
-
-/* dark overlay */
 
 body::before{
 content:"";
 position:absolute;
 inset:0;
-background:rgba(0,0,0,0.55);
-backdrop-filter:blur(3px);
+background:rgba(0,0,0,0.6);
 }
 
-/* main card */
+/* loader */
+
+#loader{
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(25px);
+z-index:999;
+cursor:pointer;
+transition:opacity 1s;
+}
+
+#loader.hidden{
+opacity:0;
+pointer-events:none;
+}
+
+.loader-text{
+font-size:clamp(18px,3vw,26px);
+letter-spacing:4px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%,100%{opacity:.4}
+50%{opacity:1}
+}
+
+/* particles */
+
+#particles{
+position:absolute;
+inset:0;
+z-index:0;
+}
+
+/* card */
 
 .card{
-
 position:relative;
-
-width:420px;
-max-width:90%;
-
-padding:50px 40px;
-
+z-index:2;
+width:100%;
+max-width:520px;
+padding:clamp(30px,5vw,60px);
 border-radius:26px;
-
-text-align:center;
-
 background:rgba(255,255,255,0.06);
-
-backdrop-filter:blur(18px);
-
+backdrop-filter:blur(25px) saturate(180%);
 border:1px solid rgba(255,255,255,0.15);
-
 box-shadow:
-0 20px 60px rgba(0,0,0,0.5),
-inset 0 0 30px rgba(255,255,255,0.04);
-
-transition:.4s;
-
+0 0 60px rgba(255,0,80,0.25),
+inset 0 0 25px rgba(255,255,255,0.05);
+text-align:center;
 }
 
-.card:hover{
-
-transform:translateY(-6px);
-
-box-shadow:
-0 30px 80px rgba(0,0,0,0.7),
-inset 0 0 40px rgba(255,255,255,0.05);
-
-}
-
-/* profile picture */
+/* pfp */
 
 .pfp{
-
-width:130px;
-height:130px;
-
+width:110px;
+height:110px;
 border-radius:50%;
-
 object-fit:cover;
-
-margin-bottom:20px;
-
+margin:0 auto 18px auto;
+display:block;
 border:2px solid rgba(255,255,255,0.3);
-
 box-shadow:
-0 0 30px rgba(255,255,255,0.25);
-
+0 0 25px rgba(255,0,80,0.6),
+0 0 60px rgba(255,0,80,0.25);
 }
 
 /* name */
 
 h1{
+font-size:clamp(32px,7vw,46px);
+letter-spacing:5px;
+margin-bottom:15px;
+min-height:54px;
+}
 
-font-size:34px;
+.name-letter{
+opacity:0;
+display:inline-block;
+transform:translateY(20px);
+}
 
-letter-spacing:3px;
-
-margin-bottom:10px;
-
+.name-letter.show{
+opacity:1;
+transform:translateY(0);
+text-shadow:
+0 0 15px #fff,
+0 0 30px #ff0050;
+transition:.4s;
 }
 
 /* bio */
 
 .bio{
-
-opacity:.85;
-
-font-size:15px;
-
+font-size:clamp(14px,3vw,18px);
 margin-bottom:25px;
-
-line-height:1.5;
-
+opacity:.9;
+min-height:22px;
 }
 
-/* divider */
-
-.divider{
-
-width:60px;
-height:2px;
-
+.cursor{
+display:inline-block;
+width:2px;
+height:18px;
 background:white;
-
-margin:20px auto;
-
-opacity:.4;
-
+margin-left:4px;
+animation:blink 1s infinite;
 }
 
-/* buttons */
+@keyframes blink{
+0%,50%,100%{opacity:1}
+25%,75%{opacity:0}
+}
 
-.links{
+/* quotes */
 
+.quote-section{
+position:relative;
+height:40px;
+margin-bottom:25px;
+overflow:hidden;
+font-size:clamp(13px,3vw,16px);
+}
+
+.quote{
+position:absolute;
+width:100%;
+opacity:0;
+transform:translateY(10px);
+transition:.8s;
+}
+
+.quote.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* visualizer */
+
+#visualizer{
+width:100%;
+height:110px;
+margin-top:10px;
+}
+
+/* speaker button */
+
+.speaker-btn{
+margin-top:12px;
+background:none;
+border:none;
+cursor:pointer;
+}
+
+.speaker-btn svg{
+width:30px;
+height:30px;
+fill:white;
+opacity:.9;
+transition:.2s;
+}
+
+.speaker-btn:hover svg{
+transform:scale(1.1);
+opacity:1;
+}
+
+/* socials */
+
+.socials{
+margin-top:25px;
 display:flex;
-
-justify-content:center;
-
-gap:14px;
-
 flex-wrap:wrap;
-
-margin-top:20px;
-
+gap:12px;
+justify-content:center;
 }
 
-.link{
-
+.social-btn{
 padding:10px 18px;
-
-border-radius:10px;
-
-text-decoration:none;
-
-font-size:14px;
-
+border-radius:12px;
+background:rgba(255,0,80,0.15);
+border:1px solid rgba(255,0,80,0.4);
 color:white;
-
-border:1px solid rgba(255,255,255,0.3);
-
-background:rgba(255,255,255,0.05);
-
-transition:.25s;
-
+text-decoration:none;
+font-size:14px;
+transition:.3s;
 }
 
-.link:hover{
-
-background:white;
-color:black;
-
-transform:translateY(-2px);
-
-}
-
-/* footer */
-
-.footer{
-
-margin-top:30px;
-
-font-size:12px;
-
-opacity:.6;
-
+.social-btn:hover{
+background:rgba(255,0,80,0.5);
+box-shadow:0 0 25px rgba(255,0,80,.9);
+transform:scale(1.05);
 }
 
 </style>
@@ -205,38 +241,239 @@ opacity:.6;
 
 <body>
 
+<div id="loader">
+<div class="loader-text">greetings.</div>
+</div>
+
+<canvas id="particles"></canvas>
+
 <div class="card">
 
-<img src="pfp.jpeg" class="pfp">
+<img src="/pfp.jpeg" class="pfp">
 
-<h1>Aaryaman</h1>
+<h1 id="username"></h1>
 
-<div class="bio">
-Student at DPS International<br>
-Interested in philosophy, debate, and music
+<p class="bio">
+<span id="typewriter"></span><span class="cursor"></span>
+</p>
+
+<div class="quote-section">
+<div class="quote active">clarity begins when faith sleeps</div>
+<div class="quote">some people prefer comfort over truth</div>
+<div class="quote">the greatest prison is thinking you are free</div>
+<div class="quote">morals are just a man made concept</div>
 </div>
 
-<div class="divider"></div>
+<canvas id="visualizer"></canvas>
 
-<div class="links">
+<button class="speaker-btn" id="speakerBtn">
 
-<a class="link"
-href="https://www.instagram.com/aaryaman_shrivastav/?hl=en"
-target="_blank">
-Instagram </a>
+<svg id="speakerIcon" viewBox="0 0 24 24">
+<path d="M3 9v6h4l5 4V5L7 9H3z"/>
+<path d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="white" stroke-width="2" fill="none"/>
+</svg>
 
-<a class="link"
-href="https://youtube.com/@Mackerein"
-target="_blank">
-YouTube </a>
+</button>
+
+<audio id="bgMusic" loop muted>
+<source src="/meaningful-love-instrumental.mp3">
+</audio>
+
+<div class="socials">
+<a class="social-btn" href="https://www.instagram.com/mackerein/?hl=en" target="_blank">Instagram</a>
+<a class="social-btn" href="https://youtube.com/@Mackerein" target="_blank">YouTube</a>
+</div>
 
 </div>
 
-<div class="footer">
-© Aaryaman
-</div>
+<script>
 
-</div>
+/* loader */
+
+const loader=document.getElementById("loader")
+const audio=document.getElementById("bgMusic")
+
+document.addEventListener("click",unlock)
+
+function unlock(){
+loader.classList.add("hidden")
+audio.muted=false
+audio.play()
+initAudio()
+revealName()
+document.removeEventListener("click",unlock)
+}
+
+/* name animation */
+
+const name="mac"
+const container=document.getElementById("username")
+
+name.split("").forEach(l=>{
+const span=document.createElement("span")
+span.textContent=l
+span.classList.add("name-letter")
+container.appendChild(span)
+})
+
+function revealName(){
+document.querySelectorAll(".name-letter")
+.forEach((l,i)=>{
+setTimeout(()=>l.classList.add("show"),i*80)
+})
+}
+
+/* typewriter */
+
+const texts=[
+"Posters and stuff",
+"Graphic Designer",
+"User suspected of being too cool"
+]
+
+let textIndex=0
+let charIndex=0
+let typing=true
+
+const typeElement=document.getElementById("typewriter")
+
+function typeEffect(){
+
+let current=texts[textIndex]
+
+if(typing){
+
+typeElement.textContent=current.substring(0,charIndex++)
+if(charIndex>current.length){
+typing=false
+setTimeout(typeEffect,1000)
+return
+}
+
+}else{
+
+typeElement.textContent=current.substring(0,charIndex--)
+if(charIndex==0){
+typing=true
+textIndex=(textIndex+1)%texts.length
+}
+
+}
+
+setTimeout(typeEffect,typing?40:25)
+
+}
+
+typeEffect()
+
+/* quotes */
+
+const quotes=document.querySelectorAll(".quote")
+let current=0
+
+setInterval(()=>{
+quotes[current].classList.remove("active")
+current=(current+1)%quotes.length
+quotes[current].classList.add("active")
+},5000)
+
+/* speaker toggle */
+
+const speakerBtn=document.getElementById("speakerBtn")
+const speakerIcon=document.getElementById("speakerIcon")
+
+let muted=false
+
+speakerBtn.onclick=()=>{
+
+muted=!muted
+audio.muted=muted
+
+speakerIcon.innerHTML = muted
+? `<path d="M3 9v6h4l5 4V5L7 9H3z"/><line x1="18" y1="6" x2="22" y2="18" stroke="white" stroke-width="2"/>`
+: `<path d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="white" stroke-width="2" fill="none"/>`
+
+}
+
+/* visualizer */
+
+const vis=document.getElementById("visualizer")
+const vctx=vis.getContext("2d")
+
+function resizeVis(){
+vis.width=vis.offsetWidth
+vis.height=110
+}
+
+resizeVis()
+window.addEventListener("resize",resizeVis)
+
+let audioCtx,analyser,source,dataArray,prevHeights=[]
+
+function initAudio(){
+
+audioCtx=new (window.AudioContext||window.webkitAudioContext)()
+
+analyser=audioCtx.createAnalyser()
+analyser.fftSize=1024
+
+source=audioCtx.createMediaElementSource(audio)
+
+source.connect(analyser)
+analyser.connect(audioCtx.destination)
+
+dataArray=new Uint8Array(analyser.frequencyBinCount)
+
+draw()
+
+}
+
+function draw(){
+
+requestAnimationFrame(draw)
+
+if(!analyser) return
+
+analyser.getByteFrequencyData(dataArray)
+
+vctx.clearRect(0,0,vis.width,vis.height)
+
+const bars=80
+const barWidth=vis.width/bars
+const baseline=vis.height
+
+vctx.fillStyle="rgb(255,0,80)"
+
+for(let i=0;i<bars;i++){
+
+let freqIndex=Math.floor((i/bars)*dataArray.length)
+
+let value=dataArray[freqIndex]/255
+let target=value*70
+
+if(!prevHeights[i]) prevHeights[i]=0
+prevHeights[i]+= (target-prevHeights[i])*0.25
+
+let height=prevHeights[i]
+
+let x=i*barWidth
+let y=baseline-height
+let r=barWidth/2
+
+vctx.beginPath()
+vctx.moveTo(x,y+r)
+vctx.arcTo(x,y,x+barWidth,y,r)
+vctx.arcTo(x+barWidth,y,x+barWidth,y+height,r)
+vctx.lineTo(x+barWidth,y+height)
+vctx.lineTo(x,y+height)
+vctx.closePath()
+vctx.fill()
+
+}
+
+}
+
+</script>
 
 </body>
 </html>
