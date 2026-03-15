@@ -81,8 +81,6 @@ text-align:center;
 box-shadow:0 0 60px rgba(255,0,80,0.25);
 }
 
-/* pfp */
-
 .pfp{
 width:110px;
 height:110px;
@@ -93,23 +91,17 @@ border:2px solid rgba(255,255,255,0.3);
 box-shadow:0 0 30px rgba(255,0,80,0.7);
 }
 
-/* name */
-
 h1{
 font-size:44px;
 letter-spacing:6px;
 margin-bottom:12px;
 }
 
-/* bio */
-
 .bio{
 font-size:17px;
 opacity:.9;
 margin-bottom:15px;
 }
-
-/* quote */
 
 .quote{
 font-size:15px;
@@ -225,7 +217,7 @@ document.removeEventListener("click",unlock)
 
 }
 
-/* audio */
+/* audio setup */
 
 let audioCtx
 let analyser
@@ -236,7 +228,9 @@ function initAudio(){
 audioCtx=new (window.AudioContext||window.webkitAudioContext)()
 
 analyser=audioCtx.createAnalyser()
-analyser.fftSize=2048
+
+analyser.fftSize=4096
+analyser.smoothingTimeConstant=0.85
 
 const source=audioCtx.createMediaElementSource(audio)
 
@@ -249,7 +243,7 @@ draw()
 
 }
 
-/* waveform visualizer */
+/* visualizer */
 
 const canvas=document.getElementById("wave")
 const ctx=canvas.getContext("2d")
@@ -276,8 +270,6 @@ ctx.clearRect(0,0,canvas.width,canvas.height)
 
 const centerY=canvas.height/2
 
-/* gradient */
-
 const gradient=ctx.createLinearGradient(0,0,canvas.width,0)
 
 gradient.addColorStop(0,"#ff6a00")
@@ -287,18 +279,24 @@ gradient.addColorStop(0.75,"#a000ff")
 gradient.addColorStop(1,"#5a00ff")
 
 ctx.strokeStyle=gradient
-ctx.lineWidth=3
-ctx.shadowBlur=25
+ctx.lineWidth=4
+ctx.lineCap="round"
+ctx.shadowBlur=18
 ctx.shadowColor="#ff00c8"
 
 ctx.beginPath()
 
 let slice=dataArray.length/canvas.width
 
+let smooth=0
+
 for(let i=0;i<canvas.width;i++){
 
-let v=dataArray[Math.floor(i*slice)]/128.0
-let y=centerY+(v-1)*50
+let v=dataArray[Math.floor(i*slice)]/128-1
+
+smooth+=(v-smooth)*0.15
+
+let y=centerY+smooth*35
 
 if(i===0){
 ctx.moveTo(i,y)
@@ -312,7 +310,7 @@ ctx.stroke()
 
 }
 
-/* speaker */
+/* speaker toggle */
 
 document.getElementById("speakerBtn").onclick=()=>{
 audio.muted=!audio.muted
