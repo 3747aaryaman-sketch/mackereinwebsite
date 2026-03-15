@@ -1,8 +1,8 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -17,15 +17,14 @@ box-sizing:border-box;
 }
 
 body{
-min-height:100dvh;
+min-height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
 font-family:Georgia,serif;
-overflow:hidden;
 color:white;
+overflow:hidden;
 background:url("/background.gif") center/cover no-repeat fixed;
-cursor:url("cursor.cur"), auto;
 padding:20px;
 }
 
@@ -33,208 +32,96 @@ body::before{
 content:"";
 position:absolute;
 inset:0;
-background:rgba(0,0,0,0.6);
-transition:0.3s;
+background:rgba(0,0,0,0.65);
 }
-
-/* loader */
-
-#loader{
-position:fixed;
-inset:0;
-display:flex;
-align-items:center;
-justify-content:center;
-background:rgba(0,0,0,0.85);
-backdrop-filter:blur(25px);
-z-index:999;
-cursor:pointer;
-transition:opacity 1s;
-}
-
-#loader.hidden{
-opacity:0;
-pointer-events:none;
-}
-
-.loader-text{
-font-size:clamp(18px,3vw,26px);
-letter-spacing:4px;
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-0%,100%{opacity:.4}
-50%{opacity:1}
-}
-
-/* particles */
-
-#particles{
-position:absolute;
-inset:0;
-z-index:0;
-}
-
-/* card */
 
 .card{
 position:relative;
 z-index:2;
 width:100%;
 max-width:520px;
-padding:clamp(30px,5vw,60px);
-border-radius:26px;
+padding:60px 50px;
+border-radius:25px;
 background:rgba(255,255,255,0.06);
-backdrop-filter:blur(25px) saturate(180%);
+backdrop-filter:blur(25px);
 border:1px solid rgba(255,255,255,0.15);
-box-shadow:
-0 0 60px rgba(255,0,80,0.25),
-inset 0 0 25px rgba(255,255,255,0.05);
 text-align:center;
+box-shadow:0 0 50px rgba(255,0,80,0.3);
 }
-
-/* pfp */
 
 .pfp{
 width:110px;
 height:110px;
 border-radius:50%;
-object-fit:cover;
-margin:0 auto 18px auto;
-display:block;
-border:2px solid rgba(255,255,255,0.3);
-box-shadow:
-0 0 25px rgba(255,0,80,0.6),
-0 0 60px rgba(255,0,80,0.25);
+margin-bottom:15px;
+border:2px solid rgba(255,255,255,0.4);
+box-shadow:0 0 30px rgba(255,0,80,0.7);
 }
-
-/* name */
 
 h1{
-font-size:clamp(32px,7vw,46px);
-letter-spacing:5px;
-margin-bottom:15px;
-min-height:54px;
+font-size:42px;
+letter-spacing:6px;
+margin-bottom:10px;
 }
-
-.name-letter{
-opacity:0;
-display:inline-block;
-transform:translateY(20px);
-}
-
-.name-letter.show{
-opacity:1;
-transform:translateY(0);
-text-shadow:
-0 0 15px #fff,
-0 0 30px #ff0050;
-transition:.4s;
-}
-
-/* bio */
 
 .bio{
-font-size:clamp(14px,3vw,18px);
-margin-bottom:20px;
 opacity:.9;
-min-height:22px;
-}
-
-.cursor{
-display:inline-block;
-width:2px;
-height:18px;
-background:white;
-margin-left:4px;
-animation:blink 1s infinite;
-}
-
-@keyframes blink{
-0%,50%,100%{opacity:1}
-25%,75%{opacity:0}
-}
-
-/* quotes */
-
-.quote-section{
-position:relative;
-height:40px;
-margin-bottom:10px;
-overflow:hidden;
-font-size:clamp(13px,3vw,16px);
+margin-bottom:20px;
+font-size:17px;
 }
 
 .quote{
-position:absolute;
-width:100%;
-opacity:0;
-transform:translateY(10px);
-transition:.8s;
+font-size:15px;
+opacity:.85;
+margin-bottom:30px;
 }
 
-.quote.active{
-opacity:1;
-transform:translateY(0);
-}
+/* waveform */
 
-/* visualizer */
-
-#visualizer{
+#wave{
 width:100%;
-height:120px;
-margin:20px auto;
+height:140px;
 display:block;
+margin:25px auto;
 }
 
-/* speaker button */
+/* speaker */
 
-.speaker-btn{
-margin-top:8px;
+.speaker{
 background:none;
 border:none;
 cursor:pointer;
+margin-bottom:20px;
 }
 
-.speaker-btn svg{
-width:30px;
-height:30px;
+.speaker svg{
+width:28px;
 fill:white;
 opacity:.9;
-transition:.2s;
-}
-
-.speaker-btn:hover svg{
-transform:scale(1.1);
-opacity:1;
 }
 
 /* socials */
 
 .socials{
-margin-top:25px;
 display:flex;
-flex-wrap:wrap;
-gap:12px;
 justify-content:center;
+gap:12px;
 }
 
-.social-btn{
-padding:10px 18px;
-border-radius:12px;
-background:rgba(255,0,80,0.15);
+.social{
+padding:9px 16px;
+border-radius:10px;
 border:1px solid rgba(255,0,80,0.4);
+background:rgba(255,0,80,0.15);
 color:white;
 text-decoration:none;
 font-size:14px;
 transition:.3s;
 }
 
-.social-btn:hover{
+.social:hover{
 background:rgba(255,0,80,0.5);
-box-shadow:0 0 25px rgba(255,0,80,.9);
-transform:scale(1.05);
+box-shadow:0 0 20px rgba(255,0,80,0.8);
 }
 
 </style>
@@ -243,183 +130,66 @@ transform:scale(1.05);
 
 <body>
 
-<div id="loader">
-<div class="loader-text">greetings.</div>
-</div>
-
-<canvas id="particles"></canvas>
-
 <div class="card">
 
 <img src="/pfp.jpeg" class="pfp">
 
-<h1 id="username"></h1>
+<h1>mac</h1>
 
-<p class="bio">
-<span id="typewriter"></span><span class="cursor"></span>
-</p>
+<div class="bio">User suspected of being too cool</div>
 
-<div class="quote-section">
-<div class="quote active">clarity begins when faith sleeps</div>
-<div class="quote">some people prefer comfort over truth</div>
 <div class="quote">the greatest prison is thinking you are free</div>
-<div class="quote">morals are just a man made concept</div>
-</div>
 
-<canvas id="visualizer"></canvas>
+<canvas id="wave"></canvas>
 
-<button class="speaker-btn" id="speakerBtn">
-<svg id="speakerIcon" viewBox="0 0 24 24">
+<button class="speaker" id="speakerBtn">
+
+<svg viewBox="0 0 24 24">
 <path d="M3 9v6h4l5 4V5L7 9H3z"/>
-<path d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="white" stroke-width="2" fill="none"/>
 </svg>
+
 </button>
 
-<audio id="bgMusic" loop muted>
+<audio id="music" loop muted>
 <source src="/meaningful-love-instrumental.mp3">
 </audio>
 
 <div class="socials">
-<a class="social-btn" href="https://www.instagram.com/mackerein/?hl=en" target="_blank">Instagram</a>
-<a class="social-btn" href="https://youtube.com/@Mackerein" target="_blank">YouTube</a>
+
+<a class="social" href="https://www.instagram.com/mackerein/" target="_blank">Instagram</a>
+
+<a class="social" href="https://youtube.com/@Mackerein" target="_blank">YouTube</a>
+
 </div>
 
 </div>
 
 <script>
 
-/* loader */
+/* unlock audio */
 
-const loader=document.getElementById("loader")
-const audio=document.getElementById("bgMusic")
+const audio=document.getElementById("music")
 
-document.addEventListener("click",unlock)
-
-function unlock(){
-loader.classList.add("hidden")
+document.addEventListener("click",()=>{
 audio.muted=false
 audio.play()
 initAudio()
-initParticles()
-revealName()
-document.removeEventListener("click",unlock)
-}
+},{once:true})
 
-/* name animation */
+/* audio setup */
 
-const name="mac"
-const container=document.getElementById("username")
-
-name.split("").forEach(l=>{
-const span=document.createElement("span")
-span.textContent=l
-span.classList.add("name-letter")
-container.appendChild(span)
-})
-
-function revealName(){
-document.querySelectorAll(".name-letter")
-.forEach((l,i)=>{
-setTimeout(()=>l.classList.add("show"),i*80)
-})
-}
-
-/* typewriter */
-
-const texts=[
-"Posters and stuff",
-"Graphic Designer",
-"User suspected of being too cool"
-]
-
-let textIndex=0
-let charIndex=0
-let typing=true
-
-const typeElement=document.getElementById("typewriter")
-
-function typeEffect(){
-
-let current=texts[textIndex]
-
-if(typing){
-
-typeElement.textContent=current.substring(0,charIndex++)
-if(charIndex>current.length){
-typing=false
-setTimeout(typeEffect,1000)
-return
-}
-
-}else{
-
-typeElement.textContent=current.substring(0,charIndex--)
-if(charIndex==0){
-typing=true
-textIndex=(textIndex+1)%texts.length
-}
-
-}
-
-setTimeout(typeEffect,typing?40:25)
-
-}
-
-typeEffect()
-
-/* quotes */
-
-const quotes=document.querySelectorAll(".quote")
-let current=0
-
-setInterval(()=>{
-quotes[current].classList.remove("active")
-current=(current+1)%quotes.length
-quotes[current].classList.add("active")
-},5000)
-
-/* speaker */
-
-const speakerBtn=document.getElementById("speakerBtn")
-const speakerIcon=document.getElementById("speakerIcon")
-
-let muted=false
-
-speakerBtn.onclick=()=>{
-
-muted=!muted
-audio.muted=muted
-
-speakerIcon.innerHTML = muted
-? `<path d="M3 9v6h4l5 4V5L7 9H3z"/><line x1="18" y1="6" x2="22" y2="18" stroke="white" stroke-width="2"/>`
-: `<path d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="white" stroke-width="2" fill="none"/>`
-
-}
-
-/* spotify visualizer */
-
-const vis=document.getElementById("visualizer")
-const vctx=vis.getContext("2d")
-
-function resizeVis(){
-vis.width=vis.offsetWidth
-vis.height=120
-}
-
-resizeVis()
-window.addEventListener("resize",resizeVis)
-
-let audioCtx,analyser,source,dataArray
-let prevHeights=[]
+let audioCtx
+let analyser
+let dataArray
 
 function initAudio(){
 
 audioCtx=new (window.AudioContext||window.webkitAudioContext)()
 
 analyser=audioCtx.createAnalyser()
-analyser.fftSize=1024
+analyser.fftSize=2048
 
-source=audioCtx.createMediaElementSource(audio)
+const source=audioCtx.createMediaElementSource(audio)
 
 source.connect(analyser)
 analyser.connect(audioCtx.destination)
@@ -430,121 +200,75 @@ draw()
 
 }
 
+/* waveform visualizer */
+
+const canvas=document.getElementById("wave")
+const ctx=canvas.getContext("2d")
+
+function resize(){
+canvas.width=canvas.offsetWidth
+canvas.height=140
+}
+
+resize()
+window.addEventListener("resize",resize)
+
 function draw(){
 
 requestAnimationFrame(draw)
 
 if(!analyser) return
 
-analyser.getByteFrequencyData(dataArray)
+analyser.getByteTimeDomainData(dataArray)
 
-vctx.clearRect(0,0,vis.width,vis.height)
+ctx.clearRect(0,0,canvas.width,canvas.height)
 
-const bars=100
-const barWidth=vis.width/bars
-const center=vis.height/2
+const centerX=canvas.width/2
+const centerY=canvas.height/2
 
-const gradient=vctx.createLinearGradient(0,0,0,vis.height)
-gradient.addColorStop(0,"#ff0050")
-gradient.addColorStop(0.5,"#ff4d88")
-gradient.addColorStop(1,"#ff0050")
+/* gradient */
 
-vctx.fillStyle=gradient
-vctx.shadowBlur=18
-vctx.shadowColor="#ff0050"
+const gradient=ctx.createLinearGradient(0,0,canvas.width,0)
 
-for(let i=0;i<bars;i++){
+gradient.addColorStop(0,"#ff5e00")
+gradient.addColorStop(0.3,"#ffd000")
+gradient.addColorStop(0.6,"#ff00c8")
+gradient.addColorStop(1,"#6a00ff")
 
-let freqIndex=Math.floor((i/bars)*dataArray.length)
+ctx.strokeStyle=gradient
+ctx.lineWidth=3
+ctx.shadowBlur=20
+ctx.shadowColor="#ff00c8"
 
-let value=dataArray[freqIndex]/255
-let target=value*90
+/* draw waveform */
 
-if(!prevHeights[i]) prevHeights[i]=0
-prevHeights[i]+= (target-prevHeights[i])*0.18
+ctx.beginPath()
 
-let height=prevHeights[i]
+let slice=dataArray.length/canvas.width
 
-let x=i*barWidth
-let yTop=center-height/2
+for(let i=0;i<canvas.width;i++){
 
-let width=barWidth*0.6
-let offset=(barWidth-width)/2
+let v=dataArray[Math.floor(i*slice)]/128.0
+let y=v*40
 
-vctx.fillRect(
-x+offset,
-yTop,
-width,
-height
-)
+ctx.lineTo(centerX+i/2,centerY+y)
+ctx.lineTo(centerX-i/2,centerY+y)
 
 }
 
-}
-
-/* particles reacting to music */
-
-const pCanvas=document.getElementById("particles")
-const pctx=pCanvas.getContext("2d")
-
-function resizeParticles(){
-pCanvas.width=window.innerWidth
-pCanvas.height=window.innerHeight
-}
-
-resizeParticles()
-window.addEventListener("resize",resizeParticles)
-
-let particles=[]
-
-function initParticles(){
-
-for(let i=0;i<60;i++){
-particles.push({
-x:Math.random()*pCanvas.width,
-y:Math.random()*pCanvas.height,
-size:Math.random()*2+1,
-speed:Math.random()*0.5+0.2
-})
-}
-
-animateParticles()
+ctx.stroke()
 
 }
 
-function animateParticles(){
+/* speaker */
 
-requestAnimationFrame(animateParticles)
+const btn=document.getElementById("speakerBtn")
 
-pctx.clearRect(0,0,pCanvas.width,pCanvas.height)
-
-let bass=0
-
-if(analyser){
-let bassIndex=5
-bass=dataArray[bassIndex]/255
-}
-
-particles.forEach(p=>{
-
-p.y-=p.speed + bass*2
-
-if(p.y<0){
-p.y=pCanvas.height
-p.x=Math.random()*pCanvas.width
-}
-
-pctx.beginPath()
-pctx.arc(p.x,p.y,p.size+bass*2,0,Math.PI*2)
-pctx.fillStyle="rgba(255,0,80,0.6)"
-pctx.fill()
-
-})
-
+btn.onclick=()=>{
+audio.muted=!audio.muted
 }
 
 </script>
 
 </body>
 </html>
-```
