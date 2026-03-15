@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -34,6 +34,7 @@ content:"";
 position:absolute;
 inset:0;
 background:rgba(0,0,0,0.6);
+transition:0.3s;
 }
 
 /* loader */
@@ -136,7 +137,7 @@ transition:.4s;
 
 .bio{
 font-size:clamp(14px,3vw,18px);
-margin-bottom:25px;
+margin-bottom:20px;
 opacity:.9;
 min-height:22px;
 }
@@ -160,7 +161,7 @@ animation:blink 1s infinite;
 .quote-section{
 position:relative;
 height:40px;
-margin-bottom:25px;
+margin-bottom:10px;
 overflow:hidden;
 font-size:clamp(13px,3vw,16px);
 }
@@ -182,14 +183,15 @@ transform:translateY(0);
 
 #visualizer{
 width:100%;
-height:110px;
-margin-top:10px;
+height:120px;
+margin:20px auto;
+display:block;
 }
 
 /* speaker button */
 
 .speaker-btn{
-margin-top:12px;
+margin-top:8px;
 background:none;
 border:none;
 cursor:pointer;
@@ -267,12 +269,10 @@ transform:scale(1.05);
 <canvas id="visualizer"></canvas>
 
 <button class="speaker-btn" id="speakerBtn">
-
 <svg id="speakerIcon" viewBox="0 0 24 24">
 <path d="M3 9v6h4l5 4V5L7 9H3z"/>
 <path d="M16 8c1.5 1.5 1.5 6.5 0 8" stroke="white" stroke-width="2" fill="none"/>
 </svg>
-
 </button>
 
 <audio id="bgMusic" loop muted>
@@ -300,6 +300,7 @@ loader.classList.add("hidden")
 audio.muted=false
 audio.play()
 initAudio()
+initParticles()
 revealName()
 document.removeEventListener("click",unlock)
 }
@@ -377,7 +378,7 @@ current=(current+1)%quotes.length
 quotes[current].classList.add("active")
 },5000)
 
-/* speaker toggle */
+/* speaker */
 
 const speakerBtn=document.getElementById("speakerBtn")
 const speakerIcon=document.getElementById("speakerIcon")
@@ -395,20 +396,21 @@ speakerIcon.innerHTML = muted
 
 }
 
-/* visualizer */
+/* spotify visualizer */
 
 const vis=document.getElementById("visualizer")
 const vctx=vis.getContext("2d")
 
 function resizeVis(){
 vis.width=vis.offsetWidth
-vis.height=110
+vis.height=120
 }
 
 resizeVis()
 window.addEventListener("resize",resizeVis)
 
-let audioCtx,analyser,source,dataArray,prevHeights=[]
+let audioCtx,analyser,source,dataArray
+let prevHeights=[]
 
 function initAudio(){
 
@@ -438,38 +440,106 @@ analyser.getByteFrequencyData(dataArray)
 
 vctx.clearRect(0,0,vis.width,vis.height)
 
-const bars=80
+const bars=100
 const barWidth=vis.width/bars
-const baseline=vis.height
+const center=vis.height/2
 
-vctx.fillStyle="rgb(255,0,80)"
+const gradient=vctx.createLinearGradient(0,0,0,vis.height)
+gradient.addColorStop(0,"#ff0050")
+gradient.addColorStop(0.5,"#ff4d88")
+gradient.addColorStop(1,"#ff0050")
+
+vctx.fillStyle=gradient
+vctx.shadowBlur=18
+vctx.shadowColor="#ff0050"
 
 for(let i=0;i<bars;i++){
 
 let freqIndex=Math.floor((i/bars)*dataArray.length)
 
 let value=dataArray[freqIndex]/255
-let target=value*70
+let target=value*90
 
 if(!prevHeights[i]) prevHeights[i]=0
-prevHeights[i]+= (target-prevHeights[i])*0.25
+prevHeights[i]+= (target-prevHeights[i])*0.18
 
 let height=prevHeights[i]
 
 let x=i*barWidth
-let y=baseline-height
-let r=barWidth/2
+let yTop=center-height/2
 
-vctx.beginPath()
-vctx.moveTo(x,y+r)
-vctx.arcTo(x,y,x+barWidth,y,r)
-vctx.arcTo(x+barWidth,y,x+barWidth,y+height,r)
-vctx.lineTo(x+barWidth,y+height)
-vctx.lineTo(x,y+height)
-vctx.closePath()
-vctx.fill()
+let width=barWidth*0.6
+let offset=(barWidth-width)/2
+
+vctx.fillRect(
+x+offset,
+yTop,
+width,
+height
+)
 
 }
+
+}
+
+/* particles reacting to music */
+
+const pCanvas=document.getElementById("particles")
+const pctx=pCanvas.getContext("2d")
+
+function resizeParticles(){
+pCanvas.width=window.innerWidth
+pCanvas.height=window.innerHeight
+}
+
+resizeParticles()
+window.addEventListener("resize",resizeParticles)
+
+let particles=[]
+
+function initParticles(){
+
+for(let i=0;i<60;i++){
+particles.push({
+x:Math.random()*pCanvas.width,
+y:Math.random()*pCanvas.height,
+size:Math.random()*2+1,
+speed:Math.random()*0.5+0.2
+})
+}
+
+animateParticles()
+
+}
+
+function animateParticles(){
+
+requestAnimationFrame(animateParticles)
+
+pctx.clearRect(0,0,pCanvas.width,pCanvas.height)
+
+let bass=0
+
+if(analyser){
+let bassIndex=5
+bass=dataArray[bassIndex]/255
+}
+
+particles.forEach(p=>{
+
+p.y-=p.speed + bass*2
+
+if(p.y<0){
+p.y=pCanvas.height
+p.x=Math.random()*pCanvas.width
+}
+
+pctx.beginPath()
+pctx.arc(p.x,p.y,p.size+bass*2,0,Math.PI*2)
+pctx.fillStyle="rgba(255,0,80,0.6)"
+pctx.fill()
+
+})
 
 }
 
@@ -477,3 +547,4 @@ vctx.fill()
 
 </body>
 </html>
+```
