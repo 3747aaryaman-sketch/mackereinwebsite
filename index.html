@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>mac</title>
 
 <style>
@@ -20,8 +22,8 @@ display:flex;
 align-items:center;
 justify-content:center;
 font-family:Georgia,serif;
-color:white;
 overflow:hidden;
+color:white;
 background:url("/background.gif") center/cover no-repeat fixed;
 cursor:url("cursor.cur"), auto;
 padding:20px;
@@ -31,7 +33,7 @@ body::before{
 content:"";
 position:absolute;
 inset:0;
-background:rgba(0,0,0,0.65);
+background:rgba(0,0,0,0.6);
 }
 
 /* loader */
@@ -42,8 +44,7 @@ inset:0;
 display:flex;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,0.85);
-backdrop-filter:blur(25px);
+background:rgba(0,0,0,0.9);
 z-index:999;
 cursor:pointer;
 transition:opacity 1s;
@@ -65,6 +66,14 @@ animation:pulse 2s infinite;
 50%{opacity:1}
 }
 
+/* particles */
+
+#particles{
+position:absolute;
+inset:0;
+z-index:0;
+}
+
 /* card */
 
 .card{
@@ -72,70 +81,124 @@ position:relative;
 z-index:2;
 width:100%;
 max-width:520px;
-padding:60px;
+padding:55px;
 border-radius:26px;
-background:rgba(255,255,255,0.06);
+background:rgba(255,0,60,0.2);
 backdrop-filter:blur(25px);
-border:1px solid rgba(255,255,255,0.15);
+border:1px solid rgba(255,255,255,0.2);
+box-shadow:
+0 0 80px rgba(255,0,80,0.45),
+inset 0 0 20px rgba(255,255,255,0.05);
 text-align:center;
-box-shadow:0 0 60px rgba(255,0,80,0.25);
 }
+
+/* profile */
 
 .pfp{
 width:110px;
 height:110px;
 border-radius:50%;
 object-fit:cover;
-margin-bottom:18px;
+margin-bottom:15px;
 border:2px solid rgba(255,255,255,0.3);
-box-shadow:0 0 30px rgba(255,0,80,0.7);
+box-shadow:
+0 0 25px rgba(255,0,80,0.6);
 }
+
+/* name */
 
 h1{
 font-size:44px;
 letter-spacing:6px;
 margin-bottom:12px;
+min-height:52px;
 }
+
+.name-letter{
+opacity:0;
+display:inline-block;
+transform:translateY(20px);
+}
+
+.name-letter.show{
+opacity:1;
+transform:translateY(0);
+transition:.4s;
+text-shadow:
+0 0 12px white,
+0 0 30px #ff0050;
+}
+
+/* bio */
 
 .bio{
 font-size:17px;
-opacity:.9;
-margin-bottom:15px;
+margin-bottom:20px;
+min-height:22px;
+}
+
+.cursor{
+display:inline-block;
+width:2px;
+height:18px;
+background:white;
+margin-left:4px;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%,50%,100%{opacity:1}
+25%,75%{opacity:0}
+}
+
+/* quotes */
+
+.quote-section{
+height:30px;
+margin-bottom:20px;
+position:relative;
+overflow:hidden;
 }
 
 .quote{
-font-size:15px;
-opacity:.85;
-margin-bottom:30px;
+position:absolute;
+width:100%;
+opacity:0;
+transition:.7s;
 }
 
-/* waveform */
+.quote.active{
+opacity:1;
+}
 
-#wave{
+/* visualizer */
+
+#visualizer{
 width:100%;
-height:120px;
+height:110px;
 display:block;
-margin:25px auto;
+margin:20px auto;
 }
 
 /* speaker */
 
 .speaker-btn{
-margin-top:10px;
 background:none;
 border:none;
 cursor:pointer;
+margin-top:10px;
 }
 
 .speaker-btn svg{
-width:30px;
+width:28px;
+height:28px;
 fill:white;
 }
 
 /* socials */
 
 .socials{
-margin-top:25px;
+margin-top:22px;
 display:flex;
 gap:12px;
 justify-content:center;
@@ -144,20 +207,21 @@ justify-content:center;
 .social-btn{
 padding:10px 18px;
 border-radius:12px;
-background:rgba(255,0,80,0.15);
+background:rgba(255,0,80,0.2);
 border:1px solid rgba(255,0,80,0.4);
 color:white;
 text-decoration:none;
 font-size:14px;
-transition:.3s;
+transition:.25s;
 }
 
 .social-btn:hover{
-background:rgba(255,0,80,0.5);
-box-shadow:0 0 20px rgba(255,0,80,.8);
+background:rgba(255,0,80,0.6);
+box-shadow:0 0 20px rgba(255,0,80,.9);
 }
 
 </style>
+
 </head>
 
 <body>
@@ -166,30 +230,39 @@ box-shadow:0 0 20px rgba(255,0,80,.8);
 <div class="loader-text">greetings.</div>
 </div>
 
+<canvas id="particles"></canvas>
+
 <div class="card">
 
 <img src="/pfp.jpeg" class="pfp">
 
-<h1>mac</h1>
+<h1 id="username"></h1>
 
-<div class="bio">User suspected of being too cool</div>
+<p class="bio">
+<span id="typewriter"></span><span class="cursor"></span>
+</p>
 
+<div class="quote-section">
+<div class="quote active">clarity begins when faith sleeps</div>
+<div class="quote">some people prefer comfort over truth</div>
 <div class="quote">the greatest prison is thinking you are free</div>
+<div class="quote">morals are just a man made concept</div>
+</div>
 
-<canvas id="wave"></canvas>
+<canvas id="visualizer"></canvas>
 
 <button class="speaker-btn" id="speakerBtn">
-<svg viewBox="0 0 24 24">
+<svg id="speakerIcon" viewBox="0 0 24 24">
 <path d="M3 9v6h4l5 4V5L7 9H3z"/>
 </svg>
 </button>
 
-<audio id="music" loop muted>
+<audio id="bgMusic" loop muted>
 <source src="/meaningful-love-instrumental.mp3">
 </audio>
 
 <div class="socials">
-<a class="social-btn" href="https://www.instagram.com/mackerein/" target="_blank">Instagram</a>
+<a class="social-btn" href="https://www.instagram.com/mackerein/?hl=en" target="_blank">Instagram</a>
 <a class="social-btn" href="https://youtube.com/@Mackerein" target="_blank">YouTube</a>
 </div>
 
@@ -200,39 +273,115 @@ box-shadow:0 0 20px rgba(255,0,80,.8);
 /* loader */
 
 const loader=document.getElementById("loader")
-const audio=document.getElementById("music")
+const audio=document.getElementById("bgMusic")
 
 document.addEventListener("click",unlock)
 
 function unlock(){
-
 loader.classList.add("hidden")
-
 audio.muted=false
 audio.play()
-
 initAudio()
-
+revealName()
+initParticles()
 document.removeEventListener("click",unlock)
+}
+
+/* name animation */
+
+const name="mac"
+const container=document.getElementById("username")
+
+name.split("").forEach(letter=>{
+const span=document.createElement("span")
+span.textContent=letter
+span.classList.add("name-letter")
+container.appendChild(span)
+})
+
+function revealName(){
+document.querySelectorAll(".name-letter").forEach((l,i)=>{
+setTimeout(()=>l.classList.add("show"),i*80)
+})
+}
+
+/* typewriter */
+
+const texts=[
+"Posters and stuff",
+"Graphic Designer",
+"User suspected of being too cool"
+]
+
+let textIndex=0
+let charIndex=0
+let typing=true
+
+const typeElement=document.getElementById("typewriter")
+
+function typeEffect(){
+
+let current=texts[textIndex]
+
+if(typing){
+
+typeElement.textContent=current.substring(0,charIndex++)
+if(charIndex>current.length){
+typing=false
+setTimeout(typeEffect,1200)
+return
+}
+
+}else{
+
+typeElement.textContent=current.substring(0,charIndex--)
+if(charIndex==0){
+typing=true
+textIndex=(textIndex+1)%texts.length
+}
 
 }
 
-/* audio setup */
+setTimeout(typeEffect,typing?40:25)
 
-let audioCtx
-let analyser
-let dataArray
+}
+
+typeEffect()
+
+/* quotes */
+
+const quotes=document.querySelectorAll(".quote")
+let currentQuote=0
+
+setInterval(()=>{
+quotes[currentQuote].classList.remove("active")
+currentQuote=(currentQuote+1)%quotes.length
+quotes[currentQuote].classList.add("active")
+},5000)
+
+/* spotify visualizer */
+
+const vis=document.getElementById("visualizer")
+const vctx=vis.getContext("2d")
+
+function resizeVis(){
+vis.width=vis.offsetWidth
+vis.height=110
+}
+
+resizeVis()
+window.addEventListener("resize",resizeVis)
+
+let audioCtx,analyser,source,dataArray
 
 function initAudio(){
 
-audioCtx=new (window.AudioContext||window.webkitAudioContext)()
+audioCtx=new(window.AudioContext||window.webkitAudioContext)()
 
 analyser=audioCtx.createAnalyser()
+analyser.fftSize=1024
 
-analyser.fftSize=4096
-analyser.smoothingTimeConstant=0.85
-
-const source=audioCtx.createMediaElementSource(audio)
+source=audioCtx.createMediaElementSource(audio)
 
 source.connect(analyser)
 analyser.connect(audioCtx.destination)
@@ -243,80 +392,98 @@ draw()
 
 }
 
-/* visualizer */
-
-const canvas=document.getElementById("wave")
-const ctx=canvas.getContext("2d")
-
-function resize(){
-
-canvas.width=canvas.offsetWidth
-canvas.height=120
-
-}
-
-resize()
-window.addEventListener("resize",resize)
-
 function draw(){
 
 requestAnimationFrame(draw)
 
 if(!analyser) return
 
-analyser.getByteTimeDomainData(dataArray)
+analyser.getByteFrequencyData(dataArray)
 
-ctx.clearRect(0,0,canvas.width,canvas.height)
+vctx.clearRect(0,0,vis.width,vis.height)
 
-const centerY=canvas.height/2
+const bars=70
+const centerX=vis.width/2
+const centerY=vis.height/2
+const barWidth=3
+const gap=2
 
-const gradient=ctx.createLinearGradient(0,0,canvas.width,0)
+vctx.fillStyle="#ff2a6d"
+vctx.shadowBlur=20
+vctx.shadowColor="#ff0050"
 
-gradient.addColorStop(0,"#ff6a00")
-gradient.addColorStop(0.25,"#ffd000")
-gradient.addColorStop(0.5,"#ff00c8")
-gradient.addColorStop(0.75,"#a000ff")
-gradient.addColorStop(1,"#5a00ff")
+for(let i=0;i<bars;i++){
 
-ctx.strokeStyle=gradient
-ctx.lineWidth=4
-ctx.lineCap="round"
-ctx.shadowBlur=18
-ctx.shadowColor="#ff00c8"
+let freqIndex=Math.floor((i/bars)*dataArray.length)
+let value=dataArray[freqIndex]/255
+let height=value*80
 
-ctx.beginPath()
+let xOffset=(barWidth+gap)*i
+let y=centerY-height/2
 
-let slice=dataArray.length/canvas.width
+vctx.fillRect(centerX+xOffset,y,barWidth,height)
+vctx.fillRect(centerX-xOffset-barWidth,y,barWidth,height)
 
-let smooth=0
-
-for(let i=0;i<canvas.width;i++){
-
-let v=dataArray[Math.floor(i*slice)]/128-1
-
-smooth+=(v-smooth)*0.15
-
-let y=centerY+smooth*35
-
-if(i===0){
-ctx.moveTo(i,y)
-}else{
-ctx.lineTo(i,y)
 }
 
 }
 
-ctx.stroke()
+/* particles */
+
+const pCanvas=document.getElementById("particles")
+const pctx=pCanvas.getContext("2d")
+
+function resizeParticles(){
+pCanvas.width=window.innerWidth
+pCanvas.height=window.innerHeight
+}
+
+resizeParticles()
+window.addEventListener("resize",resizeParticles)
+
+let particles=[]
+
+function initParticles(){
+
+for(let i=0;i<60;i++){
+particles.push({
+x:Math.random()*pCanvas.width,
+y:Math.random()*pCanvas.height,
+size:Math.random()*2+1,
+speed:Math.random()*0.5+0.2
+})
+}
+
+animateParticles()
 
 }
 
-/* speaker toggle */
+function animateParticles(){
 
-document.getElementById("speakerBtn").onclick=()=>{
-audio.muted=!audio.muted
+requestAnimationFrame(animateParticles)
+
+pctx.clearRect(0,0,pCanvas.width,pCanvas.height)
+
+particles.forEach(p=>{
+
+p.y-=p.speed
+
+if(p.y<0){
+p.y=pCanvas.height
+p.x=Math.random()*pCanvas.width
+}
+
+pctx.beginPath()
+pctx.arc(p.x,p.y,p.size,0,Math.PI*2)
+pctx.fillStyle="rgba(255,0,80,0.7)"
+pctx.fill()
+
+})
+
 }
 
 </script>
 
 </body>
 </html>
+```
